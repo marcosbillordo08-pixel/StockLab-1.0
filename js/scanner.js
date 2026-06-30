@@ -74,8 +74,6 @@ async function iniciarBarcodeDetector(video) {
     const detector = new BarcodeDetector({
         formats: [
             "code_128",
-            "ean_13",
-            "qr_code"
         ]
     });
 
