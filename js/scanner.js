@@ -2,18 +2,18 @@ const botonEscanear = document.getElementById("btnEscanear");
 
 botonEscanear.addEventListener("click", () => {
 
-    document.getElementById("reader").style.display = "flex";
+    document.getElementById("modalScanner").style.display = "flex";
 
     const html5QrCode = new Html5Qrcode("reader");
 
     Html5Qrcode.getCameras()
-        .then(cameras => {
+    .then(cameras => {
 
-            if (cameras && cameras.length) {
+        if (cameras && cameras.length) {
 
-                const camaraTrasera = cameras[cameras.length - 1];
+            const camaraTrasera = cameras[cameras.length - 1];
 
-                html5QrCode.start(
+            html5QrCode.start(
                 camaraTrasera.id,
                 {
                     fps: 15,
@@ -22,9 +22,10 @@ botonEscanear.addEventListener("click", () => {
                     height: 150
                     },
                    aspectRatio: 1.777,
-                   rememberLastUsedCamera: true
+                   rememberLastUsedCamera: 
+                true
                 },
-                    (decodedText, decodedResult) => {
+                (decodedText, decodedResult) => {
 
                         alert(
                            "Código: " + decodedText +
@@ -32,14 +33,14 @@ botonEscanear.addEventListener("click", () => {
                     decodedResult.result.format.formatName
                         );
 
-                       html5QrCode.stop().then(() => {
+                        html5QrCode.stop().then(() => {
 
                     document.getElementById("modalScanner").style.display = "none";
 
                     });
 
             }
-                    else {
+            else {
 
                 alert("No se encontraron cámaras.");
 
@@ -52,6 +53,6 @@ botonEscanear.addEventListener("click", () => {
 
             console.error(err);
 
-        });
+        
 
 });
