@@ -322,10 +322,10 @@ tr:nth-child(even){
 #reader{
 
     width:100%;
-    height:420px;
+    height:450px;
     background:#000;
-    overflow:hidden;
     border-radius:10px;
+    overflow:hidden;
 
 }
 
