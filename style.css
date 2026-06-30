@@ -1,0 +1,272 @@
+body{
+
+    margin:0;
+    background:#1b1b1b;
+    font-family:Arial, Helvetica, sans-serif;
+    color:white;
+
+}
+
+.contenedor{
+
+    width:95%;
+    margin:20px auto;
+
+}
+
+h1{
+
+    text-align:center;
+    margin-bottom:25px;
+
+}
+
+.tabs{
+
+    display:flex;
+
+}
+
+.tab{
+
+    background:#2d2d2d;
+    color:white;
+
+    border:none;
+
+    padding:15px 30px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    margin-right:2px;
+
+}
+
+.tab:hover{
+
+    background:#3c3c3c;
+
+}
+
+.activo{
+
+    background:#1b1b1b;
+
+    border-bottom:3px solid #4CAF50;
+
+}
+
+.contenido{
+
+    height:550px;
+
+    background:#222;
+
+    border:1px solid #444;
+
+}
+
+.contenido{
+
+    display:flex;
+
+    height:600px;
+
+}
+
+.panel-izquierdo{
+
+    width:320px;
+
+    background:#2a2a2a;
+
+    padding:20px;
+
+}
+
+.panel-derecho{
+
+    flex:1;
+
+    background:#202020;
+
+    padding:20px;
+
+}
+
+.panel-izquierdo label{
+
+    display:block;
+    margin-top:18px;
+    margin-bottom:5px;
+    font-weight:bold;
+
+}
+
+.panel-izquierdo select,
+.panel-izquierdo input{
+
+    width:100%;
+    height:40px;
+
+    background:#333;
+
+    color:white;
+
+    border:1px solid #555;
+
+    border-radius:6px;
+
+    font-size:15px;
+
+}
+
+.panel-izquierdo button{
+
+    width:100%;
+
+    height:45px;
+
+    margin-top:30px;
+
+    background:#2e8b57;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+.panel-izquierdo button:hover{
+
+    background:#3aa96a;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+th{
+
+    background:#2d2d2d;
+
+    color:white;
+
+    padding:12px;
+
+}
+
+td{
+
+    background:#242424;
+
+    color:white;
+
+    padding:10px;
+
+    text-align:center;
+
+}
+
+tr:nth-child(even){
+
+    background:#1d1d1d;
+
+}
+
+.error{
+
+    border:2px solid red !important;
+
+}
+
+#buscarVencimiento{
+
+    width:300px;
+
+    height:40px;
+
+    margin-top:15px;
+
+    margin-bottom:15px;
+
+    background:#333;
+
+    color:white;
+
+    border:1px solid #555;
+
+    border-radius:6px;
+
+    padding-left:10px;
+
+    font-size:15px;
+
+}
+
+.dashboard{
+
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+}
+
+.card{
+
+    flex:1;
+
+    background:#2b2b2b;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    text-align:center;
+
+    box-shadow:0 0 8px rgba(0,0,0,.35);
+
+}
+
+.card h3{
+
+    margin:0;
+
+    font-size:18px;
+
+}
+
+.card span{
+
+    display:block;
+
+    margin-top:15px;
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    color:#4CAF50;
+
+}
