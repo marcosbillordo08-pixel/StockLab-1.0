@@ -35,6 +35,12 @@ async function abrirScanner() {
 
         video.srcObject = stream;
 
+        if ("BarcodeDetector" in window) {
+
+             iniciarBarcodeDetector(video);
+
+         }
+
     } catch (error) {
 
         alert("No se pudo abrir la cámara.");
@@ -58,3 +64,44 @@ function cerrarScanner() {
     }
 
 }
+
+async function iniciarBarcodeDetector(video) {
+
+    const detector = new BarcodeDetector({
+        formats: [
+            "code_128",
+            "ean_13",
+            "qr_code"
+        ]
+    });
+
+    async function detectar() {
+
+        if (modal.style.display === "none") return;
+
+        try {
+
+            const codigos = await detector.detect(video);
+
+            if (codigos.length > 0) {
+
+                console.log(codigos[0].rawValue);
+
+            }
+
+        } catch (e) {
+
+            console.error(e);
+
+        }
+
+        requestAnimationFrame(detectar);
+
+    }
+
+    detectar();
+
+}
+
+
+
