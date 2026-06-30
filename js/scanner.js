@@ -2,107 +2,123 @@ const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
 
-btnEscanear.addEventListener("click", abrirScanner);
-btnCerrar.addEventListener("click", cerrarScanner);
+let stream = null;
 
-function abrirScanner() {
+btnEscanear.onclick = abrirScanner;
+btnCerrar.onclick = cerrarScanner;
 
-    Quagga.stop();
-    Quagga.offDetected();
+async function abrirScanner() {
 
     modal.style.display = "flex";
 
-    Quagga.init({
+    const reader = document.getElementById("reader");
 
-        inputStream: {
+    reader.innerHTML = `
+        <video id="videoScanner"
+               autoplay
+               playsinline
+               style="width:100%;border-radius:10px;">
+        </video>
+    `;
 
-            name: "Live",
+    const video = document.getElementById("videoScanner");
 
-            type: "LiveStream",
-
-            target: document.querySelector("#reader"),
-
-            constraints: {
-
-                facingMode: "environment"
-
+    stream = await navigator.mediaDevices.getUserMedia({
+        video:{
+            facingMode:{
+                ideal:"environment"
             }
-
-        },
-
-        locator: {
-
-            patchSize: "medium",
-
-            halfSample: true
-
-        },
-
-        numOfWorkers: navigator.hardwareConcurrency || 4,
-
-        decoder: {
-
-            readers: [
-
-                "ean_reader",
-                "code_128_reader"
-
-            ]
-
-        },
-
-        locate: true
-
-    },
-
-    function(err){
-
-        if(err){
-
-            console.error(err);
-
-            alert(err);
-
-            return;
-
         }
-
-        Quagga.start();
-
     });
 
-}
+    video.srcObject = stream;
 
-Quagga.offDetected();
-
-Quagga.onDetected(function(resultado){
-
-    if(!resultado.codeResult) return;
-
-    let codigo = resultado.codeResult.code;
-
-    if (!/^\d{13}$/.test(codigo) && !codigo.startsWith("]C1")) {
+    if(!("BarcodeDetector" in window)){
+        alert("Este navegador no soporta BarcodeDetector.");
         return;
     }
 
-    const gs1 = codigo.match(/01(\d{13})/);
+    const detector = new BarcodeDetector({
+        formats:[
+            "ean_13",
+            "code_128",
+            "qr_code"
+        ]
+    });
 
-    if(gs1){
-        codigo = gs1[1];
+    async function detectar(){
+
+        if(modal.style.display==="none") return;
+
+        try{
+
+            const codigos = await detector.detect(video);
+
+            if(codigos.length){
+
+                let texto = codigos[0].rawValue;
+
+                console.log(texto);
+
+                if(texto.includes("wlab.ar")){
+
+                    const partes = texto.split("/");
+
+                    const pos01 = partes.indexOf("01");
+                    const pos10 = partes.indexOf("10");
+
+                    if(pos01!=-1){
+
+                        document.getElementById("codigoBarras").value =
+                        partes[pos01+1];
+
+                    }
+
+                    if(pos10!=-1){
+
+                        document.getElementById("lote").value =
+                        partes[pos10+1];
+
+                    }
+
+                }else{
+
+                    document.getElementById("codigoBarras").value = texto;
+
+                }
+
+                cerrarScanner();
+
+                buscarCodigoBarras();
+
+                return;
+
+            }
+
+        }catch(e){
+
+            console.error(e);
+
+        }
+
+        requestAnimationFrame(detectar);
+
     }
 
-    document.getElementById("codigoBarras").value = codigo;
+    detectar();
 
-    cerrarScanner();
-
-    buscarCodigoBarras();
-
-});
+}
 
 function cerrarScanner(){
 
-    Quagga.stop();
+    modal.style.display="none";
 
-    modal.style.display = "none";
+    if(stream){
+
+        stream.getTracks().forEach(track=>track.stop());
+
+        stream=null;
+
+    }
 
 }
