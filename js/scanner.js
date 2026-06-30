@@ -85,19 +85,21 @@ async function iniciarBarcodeDetector(video) {
 
             if (codigos.length > 0) {
 
-                console.log(texto);
+                 const texto = codigos[0].rawValue;
 
-                const codigo = obtenerCodigo(texto);
+                 console.log(texto);
 
-                document.getElementById("codigoBarras").value = codigo;
+                 const codigo = obtenerCodigo(texto);
 
-                cerrarScanner();
+                 document.getElementById("codigoBarras").value = codigo;
 
-                buscarCodigoBarras();
+                 cerrarScanner();
 
-                return;
+                 buscarCodigoBarras();
 
-            }
+                 return;
+
+             }
 
         } catch (e) {
 
