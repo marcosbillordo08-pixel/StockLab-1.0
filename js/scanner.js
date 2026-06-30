@@ -103,5 +103,17 @@ async function iniciarBarcodeDetector(video) {
 
 }
 
+function obtenerCodigo(texto) {
 
+    texto = texto.replace("]C1", "");
 
+    const inicio = texto.indexOf("01");
+    const lote = texto.indexOf("10");
+
+    if (inicio === -1 || lote === -1) {
+        return texto;
+    }
+
+    return texto.substring(inicio + 2, lote);
+
+}
