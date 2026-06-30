@@ -2,19 +2,19 @@ const botonEscanear = document.getElementById("btnEscanear");
 const modalScanner = document.getElementById("modalScanner");
 const btnCerrar = document.getElementById("cerrarScanner");
 
-const reader = document.getElementById("reader");
-
 let codeReader = null;
-let controles = null;
+let leyendo = false;
 
 botonEscanear.addEventListener("click", abrirScanner);
 btnCerrar.addEventListener("click", cerrarScanner);
 
 async function abrirScanner() {
 
-    modalScanner.style.display = "flex";
+    if (leyendo) return;
 
-    reader.innerHTML = "";
+    leyendo = true;
+
+    modalScanner.style.display = "flex";
 
     codeReader = new ZXing.BrowserMultiFormatReader();
 
@@ -25,6 +25,8 @@ async function abrirScanner() {
         if (dispositivos.length === 0) {
 
             alert("No se encontró ninguna cámara.");
+
+            leyendo = false;
 
             return;
 
@@ -37,10 +39,12 @@ async function abrirScanner() {
         );
 
         if (!camara) {
+
             camara = dispositivos[dispositivos.length - 1];
+
         }
 
-        controles = await codeReader.decodeFromVideoDevice(
+        codeReader.decodeFromVideoDevice(
 
             camara.deviceId,
 
@@ -48,34 +52,36 @@ async function abrirScanner() {
 
             (resultado, error) => {
 
-                if (resultado) {
+                if (!resultado) return;
 
-                    let codigo = resultado.getText();
-                    // Si es un código GS1-128 de Wiener
-                    const match = codigo.match(/01(\d{13})/);
+                let codigo = resultado.getText();
 
-                    if (match) {
-                        codigo = match[1];
-                    }
-                    
+                // Reactivos Wiener GS1-128
+                const match = codigo.match(/01(\d{13})/);
 
-                    document.getElementById("codigoBarras").value = codigo;
+                if (match) {
 
-                    cerrarScanner();
-
-                    buscarCodigoBarras();
+                    codigo = match[1];
 
                 }
+
+                document.getElementById("codigoBarras").value = codigo;
+
+                cerrarScanner();
+
+                buscarCodigoBarras();
 
             }
 
         );
 
-    } catch (error) {
+    } catch (e) {
 
-        console.error(error);
+        console.error(e);
 
-        alert(error);
+        alert(e);
+
+        leyendo = false;
 
     }
 
@@ -83,13 +89,7 @@ async function abrirScanner() {
 
 function cerrarScanner() {
 
-    if (controles) {
-
-        controles.stop();
-
-        controles = null;
-
-    }
+    leyendo = false;
 
     if (codeReader) {
 
@@ -101,4 +101,4 @@ function cerrarScanner() {
 
     modalScanner.style.display = "none";
 
-            }
+}
