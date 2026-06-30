@@ -32,12 +32,14 @@ botonEscanear.addEventListener("click", () => {
                     decodedResult.result.format.formatName
                         );
 
-                       html5QrCode.stop();
+                       html5QrCode.stop().then(() => {
 
-                    }
-                );
+                    document.getElementById("modalScanner").style.display = "none";
 
-            } else {
+                    });
+
+            }
+                    else {
 
                 alert("No se encontraron cámaras.");
 
