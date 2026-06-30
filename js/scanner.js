@@ -34,7 +34,7 @@ async function abrirScanner() {
     video.srcObject = stream;
 
     if(!("BarcodeDetector" in window)){
-        alert("Este navegador no soporta BarcodeDetector.");
+         iniciarZXing();
         return;
     }
 
