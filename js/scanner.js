@@ -1,58 +1,111 @@
 const botonEscanear = document.getElementById("btnEscanear");
+const modalScanner = document.getElementById("modalScanner");
+const btnCerrar = document.getElementById("cerrarScanner");
 
-botonEscanear.addEventListener("click", () => {
+let html5QrCode = null;
+let escanerActivo = false;
 
-    document.getElementById("modalScanner").style.display = "flex";
+botonEscanear.addEventListener("click", iniciarEscaner);
 
-    const html5QrCode = new Html5Qrcode("reader");
+btnCerrar.addEventListener("click", cerrarEscaner);
 
-    Html5Qrcode.getCameras()
-    .then(cameras => {
+async function iniciarEscaner() {
 
-        if (cameras && cameras.length) {
+    if (escanerActivo) return;
 
-            const camaraTrasera = cameras[cameras.length - 1];
+    modalScanner.style.display = "flex";
 
-            html5QrCode.start(
-                camaraTrasera.id,
-                {
-                    fps: 15,
-                    qrbox: {
+    html5QrCode = new Html5Qrcode("reader");
+
+    try {
+
+        const cameras = await Html5Qrcode.getCameras();
+
+        if (!cameras.length) {
+
+            alert("No se encontró ninguna cámara.");
+
+            modalScanner.style.display = "none";
+
+            return;
+
+        }
+
+        // Busca una cámara trasera
+        let camara = cameras.find(c =>
+            c.label.toLowerCase().includes("back") ||
+            c.label.toLowerCase().includes("rear") ||
+            c.label.toLowerCase().includes("tras")
+        );
+
+        if (!camara) {
+            camara = cameras[cameras.length - 1];
+        }
+
+        escanerActivo = true;
+
+        await html5QrCode.start(
+
+            camara.id,
+
+            {
+                fps: 15,
+                qrbox: {
                     width: 300,
                     height: 150
-                    },
-                   aspectRatio: 1.777,
-                   rememberLastUsedCamera: 
-                true
-                },
-                (decodedText, decodedResult) => {
+                }
+            },
 
-                        alert(
-                           "Código: " + decodedText +
-                           "\n\nFormato: " + 
-                    decodedResult.result.format.formatName
-                        );
+            codigoLeido
 
-                        html5QrCode.stop().then(() => {
+        );
 
-                    document.getElementById("modalScanner").style.display = "none";
+    } catch (error) {
 
-                    });
+        alert(error);
 
-            }
-            else {
+        console.error(error);
 
-                alert("No se encontraron cámaras.");
+        modalScanner.style.display = "none";
 
-            }
+    }
 
-        })
-        .catch(err => {
+}
 
-            alert("Error:\n" + err);
+async function codigoLeido(decodedText) {
 
-            console.error(err);
+    document.getElementById("codigoBarras").value = decodedText;
 
-        
+    await cerrarEscaner();
 
-});
+    buscarCodigoBarras();
+
+}
+
+async function cerrarEscaner() {
+
+    if (!escanerActivo) {
+
+        modalScanner.style.display = "none";
+
+        return;
+
+    }
+
+    try {
+
+        await html5QrCode.stop();
+
+        await html5QrCode.clear();
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+
+    escanerActivo = false;
+
+    modalScanner.style.display = "none";
+
+}
