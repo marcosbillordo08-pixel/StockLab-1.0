@@ -16,21 +16,19 @@ async function abrirScanner() {
 
     modalScanner.style.display = "flex";
 
+    document.getElementById("reader").innerHTML = "";
+
     codeReader = new ZXing.BrowserMultiFormatReader();
 
     try {
 
-        alert("ZXing cargado");
-
         const dispositivos = await ZXing.BrowserCodeReader.listVideoInputDevices();
 
-        alert("Cámaras encontradas: " + dispositivos.length);
-        
-        if (dispositivos.length === 0) {
+        if (!dispositivos.length) {
 
             alert("No se encontró ninguna cámara.");
 
-            leyendo = false;
+            cerrarScanner();
 
             return;
 
@@ -47,7 +45,7 @@ async function abrirScanner() {
             camara = dispositivos[dispositivos.length - 1];
 
         }
-        alert("Voy a iniciar la cámara");
+
         codeReader.decodeFromVideoDevice(
 
             camara.deviceId,
@@ -61,11 +59,11 @@ async function abrirScanner() {
                 let codigo = resultado.getText();
 
                 // Reactivos Wiener GS1-128
-                const match = codigo.match(/01(\d{13})/);
+                const gs1 = codigo.match(/01(\d{13})/);
 
-                if (match) {
+                if (gs1) {
 
-                    codigo = match[1];
+                    codigo = gs1[1];
 
                 }
 
@@ -80,18 +78,12 @@ async function abrirScanner() {
         );
 
     } catch (e) {
-        alert(
-            "ERROR:\n\n" +
-            e.name +
-            "\n\n" +
-            e.message
-        );
 
         console.error(e);
 
-        
+        alert("Error al iniciar la cámara");
 
-        leyendo = false;
+        cerrarScanner();
 
     }
 
