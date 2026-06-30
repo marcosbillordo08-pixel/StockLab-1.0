@@ -11,8 +11,10 @@ botonEscanear.addEventListener("click", () => {
 
             if (cameras && cameras.length) {
 
+                const camaraTrasera = cameras[cameras.length - 1];
+
                 html5QrCode.start(
-                    cameras[0].id,
+                camaraTrasera.id,
                     {
                         fps: 10,
                         qrbox: 250
