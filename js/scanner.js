@@ -20,8 +20,12 @@ async function abrirScanner() {
 
     try {
 
+        alert("ZXing cargado");
+
         const dispositivos = await ZXing.BrowserCodeReader.listVideoInputDevices();
 
+        alert("Cámaras encontradas: " + dispositivos.length);
+        
         if (dispositivos.length === 0) {
 
             alert("No se encontró ninguna cámara.");
