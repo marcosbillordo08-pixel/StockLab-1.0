@@ -2,7 +2,7 @@ const botonEscanear = document.getElementById("btnEscanear");
 
 botonEscanear.addEventListener("click", () => {
 
-    document.getElementById("reader").style.display = "block";
+    document.getElementById("reader").style.display = "flex";
 
     const html5QrCode = new Html5Qrcode("reader");
 
