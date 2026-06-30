@@ -17,6 +17,8 @@ async function abrirScanner() {
     try {
 
         const devices = await ZXing.BrowserCodeReader.listVideoInputDevices();
+        console.log(devices);
+        alert("Cámaras encontradas: " + devices.length);
 
         if (!devices.length) {
             alert("No se encontró ninguna cámara.");
@@ -24,6 +26,7 @@ async function abrirScanner() {
         }
 
         let camera = devices[devices.length - 1];
+        console.log(camera);
 
         controls = await codeReader.decodeFromVideoDevice(
 
