@@ -42,14 +42,7 @@ function abrirScanner() {
             readers: [
 
                 "ean_reader",
-
-                "ean_8_reader",
-
-                "code_128_reader",
-
-                "upc_reader",
-
-                "upc_e_reader"
+                "code_128_reader"
 
             ]
 
@@ -77,16 +70,20 @@ function abrirScanner() {
 
 }
 
+Quagga.offDetected();
+
 Quagga.onDetected(function(resultado){
 
+    if(!resultado.codeResult) return;
+
     let codigo = resultado.codeResult.code;
+
+    if(codigo.length < 12) return;
 
     const gs1 = codigo.match(/01(\d{13})/);
 
     if(gs1){
-
         codigo = gs1[1];
-
     }
 
     document.getElementById("codigoBarras").value = codigo;
