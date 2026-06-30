@@ -33,9 +33,12 @@ async function abrirScanner() {
 
     video.srcObject = stream;
 
-    if(!("BarcodeDetector" in window)){
-        alert("Este navegador no soporta BarcodeDetector.");
-        return;
+    if (!("BarcodeDetector" in window)) {
+
+         iniciarZXing(video);
+
+         return;
+
     }
 
     const detector = new BarcodeDetector({
@@ -118,6 +121,35 @@ function cerrarScanner(){
         stream.getTracks().forEach(track=>track.stop());
 
         stream=null;
+
+    }
+
+}
+
+async function iniciarZXing(video){
+
+    const reader = new ZXing.BrowserMultiFormatReader();
+
+    try{
+
+        const resultado = await reader.decodeOnceFromVideoElement(video);
+
+        let texto = resultado.getText();
+
+        document.getElementById("codigoBarras").value =
+            obtenerCodigo(texto);
+
+        reader.reset();
+
+        cerrarScanner();
+
+        buscarCodigoBarras();
+
+    }catch(e){
+
+        console.error(e);
+
+        alert("No se pudo leer el código.");
 
     }
 
