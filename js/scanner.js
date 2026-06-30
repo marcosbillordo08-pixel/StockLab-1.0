@@ -83,7 +83,7 @@ async function abrirScanner() {
 
                 }else{
 
-                    document.getElementById("codigoBarras").value = texto;
+                    document.getElementById("codigoBarras").value = obtenerCodigo(texto);
 
                 }
 
@@ -120,5 +120,27 @@ function cerrarScanner(){
         stream=null;
 
     }
+
+}
+
+function obtenerCodigo(texto){
+
+    // Quitar el prefijo GS1
+    texto = texto.replace("]C1", "");
+
+    // Buscar AI 01 (GTIN)
+    const indice = texto.indexOf("01");
+
+    if(indice === -1){
+
+        return texto;
+
+    }
+
+    // Tomar los 14 dígitos del GTIN
+    const gtin = texto.substring(indice + 2, indice + 16);
+
+    // Convertir a 13 dígitos (como usa tu base)
+    return gtin.substring(0,13);
 
 }
