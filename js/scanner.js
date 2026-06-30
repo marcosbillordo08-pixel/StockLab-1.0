@@ -7,6 +7,9 @@ btnCerrar.addEventListener("click", cerrarScanner);
 
 function abrirScanner() {
 
+    Quagga.stop();
+    Quagga.offDetected();
+
     modal.style.display = "flex";
 
     Quagga.init({
@@ -78,7 +81,9 @@ Quagga.onDetected(function(resultado){
 
     let codigo = resultado.codeResult.code;
 
-    if(codigo.length < 12) return;
+    if (!/^\d{13}$/.test(codigo) && !codigo.startsWith("]C1")) {
+        return;
+    }
 
     const gs1 = codigo.match(/01(\d{13})/);
 
