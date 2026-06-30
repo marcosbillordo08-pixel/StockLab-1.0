@@ -2,110 +2,96 @@ const botonEscanear = document.getElementById("btnEscanear");
 const modalScanner = document.getElementById("modalScanner");
 const btnCerrar = document.getElementById("cerrarScanner");
 
-let html5QrCode = null;
-let escanerActivo = false;
+const reader = document.getElementById("reader");
 
-botonEscanear.addEventListener("click", iniciarEscaner);
+let codeReader = null;
+let controles = null;
 
-btnCerrar.addEventListener("click", cerrarEscaner);
+botonEscanear.addEventListener("click", abrirScanner);
+btnCerrar.addEventListener("click", cerrarScanner);
 
-async function iniciarEscaner() {
-
-    if (escanerActivo) return;
+async function abrirScanner() {
 
     modalScanner.style.display = "flex";
 
-    html5QrCode = new Html5Qrcode("reader");
+    reader.innerHTML = "";
+
+    codeReader = new ZXing.BrowserMultiFormatReader();
 
     try {
 
-        const cameras = await Html5Qrcode.getCameras();
+        const dispositivos = await ZXing.BrowserCodeReader.listVideoInputDevices();
 
-        if (!cameras.length) {
+        if (dispositivos.length === 0) {
 
             alert("No se encontró ninguna cámara.");
-
-            modalScanner.style.display = "none";
 
             return;
 
         }
 
-        // Busca una cámara trasera
-        let camara = cameras.find(c =>
+        let camara = dispositivos.find(c =>
             c.label.toLowerCase().includes("back") ||
             c.label.toLowerCase().includes("rear") ||
             c.label.toLowerCase().includes("tras")
         );
 
         if (!camara) {
-            camara = cameras[cameras.length - 1];
+            camara = dispositivos[dispositivos.length - 1];
         }
 
-        escanerActivo = true;
+        controles = await codeReader.decodeFromVideoDevice(
 
-        await html5QrCode.start(
+            camara.deviceId,
 
-            camara.id,
+            "reader",
 
-            {
-                fps: 15,
-                qrbox: {
-                    width: 300,
-                    height: 150
+            (resultado, error) => {
+
+                if (resultado) {
+
+                    let codigo = resultado.getText();
+
+                    document.getElementById("codigoBarras").value = codigo;
+
+                    cerrarScanner();
+
+                    buscarCodigoBarras();
+
                 }
-            },
 
-            codigoLeido
+            }
 
         );
 
     } catch (error) {
 
-        alert(error);
-
         console.error(error);
 
-        modalScanner.style.display = "none";
+        alert(error);
 
     }
 
 }
 
-async function codigoLeido(decodedText) {
+function cerrarScanner() {
 
-    document.getElementById("codigoBarras").value = decodedText;
+    if (controles) {
 
-    await cerrarEscaner();
+        controles.stop();
 
-    buscarCodigoBarras();
-
-}
-
-async function cerrarEscaner() {
-
-    if (!escanerActivo) {
-
-        modalScanner.style.display = "none";
-
-        return;
+        controles = null;
 
     }
 
-    try {
+    if (codeReader) {
 
-        await html5QrCode.stop();
+        codeReader.reset();
 
-        await html5QrCode.clear();
-
-    } catch (e) {
-
-        console.log(e);
+        codeReader = null;
 
     }
-
-    escanerActivo = false;
 
     modalScanner.style.display = "none";
 
-}
+            }
