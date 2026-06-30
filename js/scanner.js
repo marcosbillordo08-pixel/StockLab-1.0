@@ -15,10 +15,15 @@ botonEscanear.addEventListener("click", () => {
 
                 html5QrCode.start(
                 camaraTrasera.id,
-                    {
-                        fps: 10,
-                        qrbox: 250
+                {
+                    fps: 15,
+                    qrbox: {
+                    width: 300,
+                    height: 150
                     },
+                   aspectRatio: 1.777,
+                   rememberLastUsedCamera: true
+                },
                     (decodedText, decodedResult) => {
 
                         alert(
