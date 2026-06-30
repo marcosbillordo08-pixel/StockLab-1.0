@@ -51,6 +51,13 @@ async function abrirScanner() {
                 if (resultado) {
 
                     let codigo = resultado.getText();
+                    // Si es un código GS1-128 de Wiener
+                    const match = codigo.match(/01(\d{13})/);
+
+                    if (match) {
+                        codigo = match[1];
+                    }
+                    
 
                     document.getElementById("codigoBarras").value = codigo;
 
