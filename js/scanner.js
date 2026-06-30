@@ -46,7 +46,7 @@ botonEscanear.addEventListener("click", () => {
         })
         .catch(err => {
 
-            alert(err);
+            alert("Error:\n" + err);
 
             console.error(err);
 
