@@ -320,13 +320,19 @@ tr:nth-child(even){
 }
 
 #reader{
+
     width:100%;
-    height:500px;
-    background:red;
+    height:420px;
+    background:#000;
+    overflow:hidden;
+    border-radius:10px;
+
 }
 
 #reader video{
-    width:100% !important;
-    height:100% !important;
+
+    width:100%;
+    height:100%;
     object-fit:cover;
+
 }
