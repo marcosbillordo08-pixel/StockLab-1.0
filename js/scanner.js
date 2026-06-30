@@ -19,11 +19,15 @@ botonEscanear.addEventListener("click", () => {
                         fps: 10,
                         qrbox: 250
                     },
-                    (decodedText) => {
+                    (decodedText, decodedResult) => {
 
-                        alert(decodedText);
+                        alert(
+                           "Código: " + decodedText +
+                           "\n\nFormato: " + 
+                    decodedResult.result.format.formatName
+                        );
 
-                        html5QrCode.stop();
+                       html5QrCode.stop();
 
                     }
                 );
