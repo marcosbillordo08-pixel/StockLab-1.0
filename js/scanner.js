@@ -1,106 +1,106 @@
-const botonEscanear = document.getElementById("btnEscanear");
-const modalScanner = document.getElementById("modalScanner");
+const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
+const modal = document.getElementById("modalScanner");
 
-let codeReader = null;
-let leyendo = false;
-
-botonEscanear.addEventListener("click", abrirScanner);
+btnEscanear.addEventListener("click", abrirScanner);
 btnCerrar.addEventListener("click", cerrarScanner);
 
-async function abrirScanner() {
+function abrirScanner() {
 
-    if (leyendo) return;
+    modal.style.display = "flex";
 
-    leyendo = true;
+    Quagga.init({
 
-    modalScanner.style.display = "flex";
+        inputStream: {
 
-    document.getElementById("reader").innerHTML = "";
+            name: "Live",
 
-    codeReader = new ZXing.BrowserMultiFormatReader();
+            type: "LiveStream",
 
-    try {
+            target: document.querySelector("#reader"),
 
-        const dispositivos = await ZXing.BrowserCodeReader.listVideoInputDevices();
+            constraints: {
 
-        if (!dispositivos.length) {
+                facingMode: "environment"
 
-            alert("No se encontró ninguna cámara.");
+            }
 
-            cerrarScanner();
+        },
+
+        locator: {
+
+            patchSize: "medium",
+
+            halfSample: true
+
+        },
+
+        numOfWorkers: navigator.hardwareConcurrency || 4,
+
+        decoder: {
+
+            readers: [
+
+                "ean_reader",
+
+                "ean_8_reader",
+
+                "code_128_reader",
+
+                "upc_reader",
+
+                "upc_e_reader"
+
+            ]
+
+        },
+
+        locate: true
+
+    },
+
+    function(err){
+
+        if(err){
+
+            console.error(err);
+
+            alert(err);
 
             return;
 
         }
 
-        let camara = dispositivos.find(c =>
-            c.label.toLowerCase().includes("back") ||
-            c.label.toLowerCase().includes("rear") ||
-            c.label.toLowerCase().includes("tras")
-        );
+        Quagga.start();
 
-        if (!camara) {
-
-            camara = dispositivos[dispositivos.length - 1];
-
-        }
-
-        codeReader.decodeFromVideoDevice(
-
-            camara.deviceId,
-
-            "reader",
-
-            (resultado, error) => {
-
-                if (!resultado) return;
-
-                let codigo = resultado.getText();
-
-                // Reactivos Wiener GS1-128
-                const gs1 = codigo.match(/01(\d{13})/);
-
-                if (gs1) {
-
-                    codigo = gs1[1];
-
-                }
-
-                document.getElementById("codigoBarras").value = codigo;
-
-                cerrarScanner();
-
-                buscarCodigoBarras();
-
-            }
-
-        );
-
-    } catch (e) {
-
-        console.error(e);
-
-        alert("Error al iniciar la cámara");
-
-        cerrarScanner();
-
-    }
+    });
 
 }
 
-function cerrarScanner() {
+Quagga.onDetected(function(resultado){
 
-    leyendo = false;
+    let codigo = resultado.codeResult.code;
 
-    if (codeReader) {
+    const gs1 = codigo.match(/01(\d{13})/);
 
-        codeReader.reset();
+    if(gs1){
 
-        codeReader = null;
+        codigo = gs1[1];
 
     }
 
-    modalScanner.style.display = "none";
+    document.getElementById("codigoBarras").value = codigo;
+
+    cerrarScanner();
+
+    buscarCodigoBarras();
+
+});
+
+function cerrarScanner(){
+
+    Quagga.stop();
+
+    modal.style.display = "none";
 
 }
