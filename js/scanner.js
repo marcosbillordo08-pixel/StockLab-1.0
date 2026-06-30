@@ -117,6 +117,7 @@ async function iniciarBarcodeDetector(video) {
 
 }
 
+console.log("Leído:", texto);
 function obtenerCodigo(texto) {
 
     texto = texto.replace("]C1", "");
