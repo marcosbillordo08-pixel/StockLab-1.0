@@ -35,6 +35,10 @@ async function abrirScanner() {
 
         video.srcObject = stream;
 
+        await video.play();
+
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
         if ("BarcodeDetector" in window) {
 
              iniciarBarcodeDetector(video);
