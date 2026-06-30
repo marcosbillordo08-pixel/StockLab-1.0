@@ -47,7 +47,7 @@ async function abrirScanner() {
             camara = dispositivos[dispositivos.length - 1];
 
         }
-
+        alert("Voy a iniciar la cámara");
         codeReader.decodeFromVideoDevice(
 
             camara.deviceId,
@@ -80,10 +80,16 @@ async function abrirScanner() {
         );
 
     } catch (e) {
+        alert(
+            "ERROR:\n\n" +
+            e.name +
+            "\n\n" +
+            e.message
+        );
 
         console.error(e);
 
-        alert(e);
+        
 
         leyendo = false;
 
