@@ -43,6 +43,13 @@ async function abrirScanner() {
             disablePictureInPicture
             style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
         </video>
+        <div class="scanFrame">
+            <div class="scanFrame-corner tl"></div>
+            <div class="scanFrame-corner tr"></div>
+            <div class="scanFrame-corner bl"></div>
+            <div class="scanFrame-corner br"></div>
+            <div class="scanLine"></div>
+        </div>
     `;
 
     const video = document.getElementById("videoScanner");
