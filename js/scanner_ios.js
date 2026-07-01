@@ -4,6 +4,7 @@ const modal = document.getElementById("modalScanner");
 
 let controls = null;
 let codeReader = null;
+let stream = null;
 
 btnEscanear.onclick = abrirScanner;
 btnCerrar.onclick = cerrarScanner;
@@ -12,31 +13,62 @@ async function abrirScanner() {
 
     modal.style.display = "flex";
 
-    codeReader = new ZXing.BrowserMultiFormatReader();
+    const reader = document.getElementById("reader");
+
+    reader.innerHTML = `
+        <video
+            id="videoScanner"
+            autoplay
+            playsinline
+            muted
+            style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
+        </video>
+    `;
+
+    const video = document.getElementById("videoScanner");
 
     try {
 
-        const devices = await ZXing.BrowserCodeReader.listVideoInputDevices();
-        console.log(devices);
-        alert("Cámaras encontradas: " + devices.length);
+        stream = await navigator.mediaDevices.getUserMedia({
 
-        if (!devices.length) {
-            alert("No se encontró ninguna cámara.");
-            return;
-        }
+            video:{
 
-        let camera = devices[devices.length - 1];
-        console.log(camera);
+                facingMode:{
+                    ideal:"environment"
+                }
 
-        controls = await codeReader.decodeFromVideoDevice(
+            }
 
-            camera.deviceId,
+        });
 
-            "reader",
+        video.srcObject = stream;
 
-            (result, err) => {
+        await video.play();
 
-                if (result) {
+        iniciarZXing(video);
+
+    } catch(e){
+
+        console.error(e);
+
+        alert("No se pudo abrir la cámara.");
+
+    }
+}
+
+async function iniciarZXing(video){
+
+    codeReader = new ZXing.BrowserMultiFormatReader();
+
+    try{
+
+        codeReader.decodeFromVideoElement(
+
+            video,
+
+            (result, err)=>{
+
+                if(result){
 
                     console.log("Código leído:");
 
@@ -48,7 +80,7 @@ async function abrirScanner() {
 
         );
 
-    } catch (e) {
+    }catch(e){
 
         console.error(e);
 
@@ -73,6 +105,14 @@ function cerrarScanner() {
         codeReader.reset();
 
         codeReader = null;
+
+    }
+
+    if(stream){
+
+    stream.getTracks().forEach(track=>track.stop());
+
+    stream = null;
 
     }
 
