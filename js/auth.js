@@ -23,13 +23,13 @@ const linkMostrarLogin = document.getElementById("linkMostrarLogin");
 const btnLogout = document.getElementById("btnLogout");
 const btnLogoutPendiente = document.getElementById("btnLogoutPendiente");
 
-function mostrarSoloPantalla(pantalla) {
+function mostrarSoloPantalla(pantalla, tipoDisplay) {
 
     pantallaLogin.style.display = "none";
     pantallaPendiente.style.display = "none";
     appContenido.style.display = "none";
 
-    pantalla.style.display = "flex";
+    pantalla.style.display = tipoDisplay || "flex";
 
 }
 
@@ -160,7 +160,7 @@ auth.onAuthStateChanged(async function (user) {
 
         if (datos.aprobado === true) {
 
-            mostrarSoloPantalla(appContenido);
+            mostrarSoloPantalla(appContenido, "block");
 
             btnAdminPanel.style.display = (datos.admin === true) ? "inline-flex" : "none";
 
