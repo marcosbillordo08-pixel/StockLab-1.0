@@ -276,17 +276,20 @@
                                 </button>
                             </div>
 
-                            <div class="campo campo-boton-solo">
-                                <button id="btnExportar">
-                                    💾 Exportar respaldo
+                            <div class="campo campo-boton-solo configWrapper">
+                                <button id="btnConfig" type="button">
+                                    ⚙️ Configuración
                                 </button>
-                            </div>
 
-                            <div class="campo campo-boton-solo">
-                                <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
-                                <button id="btnImportar">
-                                    📂 Restaurar respaldo
-                                </button>
+                                <div id="menuConfig" class="menuConfig">
+                                    <button id="btnExportar">
+                                        💾 Exportar respaldo
+                                    </button>
+                                    <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
+                                    <button id="btnImportar">
+                                        📂 Restaurar respaldo
+                                    </button>
+                                </div>
                             </div>
 
                         </div>
@@ -412,8 +415,9 @@
     <script src="js/respaldo.js"></script>
     <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
     <script src="js/scanner_ios.js"></script>
+    <script src="js/config-menu.js"></script>
     <script src="js/pdf.js"></script>
 
 </body>
 
-    </html>
+</html>
