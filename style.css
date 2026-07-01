@@ -821,11 +821,122 @@ small {
     border-bottom: 1px solid var(--border);
     margin: 0 -24px 24px;
     padding: env(safe-area-inset-top, 0) 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .app-header h1 {
     margin: 0;
     padding: 16px 0;
+}
+
+.headerAcciones {
+    display: flex;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.btnHeader {
+    width: auto;
+    margin: 0;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+}
+
+/* ==========================================================================
+   Pantallas de autenticación (login / registro / pendiente de aprobación)
+   ========================================================================== */
+
+.authScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.authBox {
+    width: min(380px, 100%);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 26px;
+    text-align: center;
+}
+
+.authBox h1 {
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.authBox p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.authForm {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.authError {
+    color: var(--danger) !important;
+    min-height: 16px;
+}
+
+.authLink {
+    margin-top: 16px;
+    font-size: 0.85rem;
+}
+
+.authLink a {
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.authLink a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Panel de administración de usuarios
+   ========================================================================== */
+
+.listaPendientes {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.filaPendiente {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+
+.filaPendiente span {
+    flex: 1;
+    font-size: 0.88rem;
+    word-break: break-all;
+}
+
+.filaPendiente button {
+    width: auto;
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 0.75rem;
 }
 
 /* ==========================================================================
