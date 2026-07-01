@@ -59,95 +59,131 @@
 
                     <div class="panel-izquierdo-body">
 
-                        <label>Tipo</label>
-                        <select id="tipo">
-                            <option>ENTRADA</option>
-                            <option>SALIDA</option>
-                        </select>
+                        <div class="campos-grid">
 
-                        <label>Categoria</label>
-                        <select id="categoria">
-                            <option>REACTIVOS</option>
-                            <option>INSUMOS</option>
-                            <option>MATERIALES</option>
-                        </select>
-
-                        <label>Producto</label>
-                        <select id="producto">
-
-                        </select>
-
-                        <label>Marca</label>
-                        <select id="marca">
-
-                        </select>
-
-                        <label>Presentación</label>
-
-                        <select id="presentacion">
-                            <option value="Caja">Caja</option>
-                            <option value="Frasco">Frasco</option>
-                            <option value="Kits">Kits</option>
-                            <option value="Bolsa">Bolsa</option>
-                            <option value="Sobre">Sobre</option>
-                            <option value="Botella">Botella</option>
-                            <option value="Bidón">"Bidón"</option>
-                            <option value="Unidad">Unidad</option>
-                        </select>
-
-                        <label id="lblTipoReactivo" style="display:none;">
-                            Tipo de reactivo
-                        </label>
-
-                        <select id="tipoReactivo" style="display:none;">
-                            <option value="A">Reactivo A</option>
-                            <option value="B">Reactivo B</option>
-                            <option value="AB">Reactivo A-B</option>
-                        </select>
-
-                        <div id="componentesReactivo" style="display:none;">
-
-                            <label id="lblR1">Reactivo R1</label>
-                            <input type="number" id="cantidadR1" min="0" value="0">
-
-                            <label id="lblR2">Reactivo R2</label>
-                            <input type="number" id="cantidadR2" min="0" value="0">
-
-                        </div>
-
-                        <label>Código de barras</label>
-
-                        <input type="text" id="codigoBarras" placeholder="Escanee aquí...">
-
-                        <button id="btnEscanear">
-                            📷 Escanear
-                        </button>
-
-                        <div id="modalScanner" class="modalScanner">
-                            <div class="scannerBox">
-                                <div class="scannerHeader">
-                                    <h2>📷 Escanear código de barras</h2>
-                                    <button id="cerrarScanner">✖</button>
-                                </div>
-                                <div id="reader"></div>
+                            <div class="campo">
+                                <label>Tipo</label>
+                                <select id="tipo">
+                                    <option>ENTRADA</option>
+                                    <option>SALIDA</option>
+                                </select>
                             </div>
+
+                            <div class="campo">
+                                <label>Categoria</label>
+                                <select id="categoria">
+                                    <option>REACTIVOS</option>
+                                    <option>INSUMOS</option>
+                                    <option>MATERIALES</option>
+                                </select>
+                            </div>
+
+                            <div class="campo">
+                                <label>Producto</label>
+                                <select id="producto">
+
+                                </select>
+                            </div>
+
+                            <div class="campo">
+                                <label>Marca</label>
+                                <select id="marca">
+
+                                </select>
+                            </div>
+
+                            <div class="campo">
+                                <label>Presentación</label>
+
+                                <select id="presentacion">
+                                    <option value="Caja">Caja</option>
+                                    <option value="Frasco">Frasco</option>
+                                    <option value="Kits">Kits</option>
+                                    <option value="Bolsa">Bolsa</option>
+                                    <option value="Sobre">Sobre</option>
+                                    <option value="Botella">Botella</option>
+                                    <option value="Bidón">"Bidón"</option>
+                                    <option value="Unidad">Unidad</option>
+                                </select>
+                            </div>
+
+                            <div class="campo">
+                                <label id="lblTipoReactivo" style="display:none;">
+                                    Tipo de reactivo
+                                </label>
+
+                                <select id="tipoReactivo" style="display:none;">
+                                    <option value="A">Reactivo A</option>
+                                    <option value="B">Reactivo B</option>
+                                    <option value="AB">Reactivo A-B</option>
+                                </select>
+                            </div>
+
                         </div>
 
-                        <small id="mensajeCodigo"></small>
+                        <div id="componentesReactivo" class="campos-grid" style="display:none;">
 
-                        <label>Cod. Ref.</label>
-                        <input type="text" id="codigoReferencia" readonly>
+                            <div class="campo">
+                                <label id="lblR1">Reactivo R1</label>
+                                <input type="number" id="cantidadR1" min="0" value="0">
+                            </div>
 
-                        <label>Lote</label>
-                        <input id="lote" type="text">
+                            <div class="campo">
+                                <label id="lblR2">Reactivo R2</label>
+                                <input type="number" id="cantidadR2" min="0" value="0">
+                            </div>
 
-                        <label>Vencimiento</label>
-                        <input id="vencimiento" type="date">
+                        </div>
 
-                        <label>Cantidad</label>
-                        <input id="cantidad" type="number" value="1" min="1">
+                        <div class="campo campo-full">
+                            <label>Código de barras</label>
 
-                        <div id="panelComponenteSalida" style="display:none;">
+                            <div class="fila-codigo">
+                                <input type="text" id="codigoBarras" placeholder="Escanee aquí...">
+
+                                <button id="btnEscanear" type="button">
+                                    📷 Escanear
+                                </button>
+                            </div>
+
+                            <div id="modalScanner" class="modalScanner">
+                                <div class="scannerBox">
+                                    <div class="scannerHeader">
+                                        <h2>📷 Escanear código de barras</h2>
+                                        <button id="cerrarScanner">✖</button>
+                                    </div>
+                                    <div id="reader"></div>
+                                </div>
+                            </div>
+
+                            <small id="mensajeCodigo"></small>
+                        </div>
+
+                        <div class="campos-grid">
+
+                            <div class="campo">
+                                <label>Cod. Ref.</label>
+                                <input type="text" id="codigoReferencia" readonly>
+                            </div>
+
+                            <div class="campo">
+                                <label>Lote</label>
+                                <input id="lote" type="text">
+                            </div>
+
+                            <div class="campo">
+                                <label>Vencimiento</label>
+                                <input id="vencimiento" type="date">
+                            </div>
+
+                            <div class="campo">
+                                <label>Cantidad</label>
+                                <input id="cantidad" type="number" value="1" min="1">
+                            </div>
+
+                        </div>
+
+                        <div id="panelComponenteSalida" class="campo campo-full" style="display:none;">
                             <label>Componente</label>
                             <select id="componenteSalida">
                                 <option value="R1">Reactivo R1</option>
@@ -157,32 +193,42 @@
 
                         <hr>
 
-                        <button id="btnAgregar">
+                        <button id="btnAgregar" class="btn-principal">
                             ➕ Agregar Movimiento
                         </button>
 
-                        <label>Exportar reporte</label>
+                        <div class="campos-grid campos-grid-acciones">
 
-                        <select id="filtroPDF">
-                            <option value="TODOS">TODOS</option>
-                            <option value="REACTIVOS">REACTIVOS</option>
-                            <option value="INSUMOS">INSUMOS</option>
-                            <option value="MATERIALES">MATERIALES</option>
-                        </select>
+                            <div class="campo">
+                                <label>Exportar reporte</label>
+                                <select id="filtroPDF">
+                                    <option value="TODOS">TODOS</option>
+                                    <option value="REACTIVOS">REACTIVOS</option>
+                                    <option value="INSUMOS">INSUMOS</option>
+                                    <option value="MATERIALES">MATERIALES</option>
+                                </select>
+                            </div>
 
-                        <button id="btnPDF">
-                            📄 Exportar PDF
-                        </button>
+                            <div class="campo campo-boton-solo">
+                                <button id="btnPDF">
+                                    📄 Exportar PDF
+                                </button>
+                            </div>
 
-                        <button id="btnExportar">
-                            💾 Exportar respaldo
-                        </button>
+                            <div class="campo campo-boton-solo">
+                                <button id="btnExportar">
+                                    💾 Exportar respaldo
+                                </button>
+                            </div>
 
-                        <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
+                            <div class="campo campo-boton-solo">
+                                <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
+                                <button id="btnImportar">
+                                    📂 Restaurar respaldo
+                                </button>
+                            </div>
 
-                        <button id="btnImportar">
-                            📂 Restaurar respaldo
-                        </button>
+                        </div>
 
                     </div>
 
@@ -304,3 +350,4 @@
 </body>
 
 </html>
+
