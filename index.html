@@ -13,10 +13,71 @@
 
 <body>
 
-    <div class="contenedor">
+    <div id="pantallaLogin" class="authScreen">
+        <div class="authBox">
+            <h1>🧪 StockLab</h1>
+
+            <form id="formLogin" class="authForm">
+
+                <label>Correo</label>
+                <input type="email" id="loginEmail" required autocomplete="username">
+
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" required autocomplete="current-password">
+
+                <small id="loginError" class="authError"></small>
+
+                <button type="submit" class="btn-principal">Ingresar</button>
+
+            </form>
+
+            <form id="formRegistro" class="authForm" style="display:none;">
+
+                <label>Correo</label>
+                <input type="email" id="registroEmail" required autocomplete="username">
+
+                <label>Contraseña (mínimo 6 caracteres)</label>
+                <input type="password" id="registroPassword" required autocomplete="new-password" minlength="6">
+
+                <small id="registroError" class="authError"></small>
+
+                <button type="submit" class="btn-principal">Crear cuenta</button>
+
+            </form>
+
+            <p class="authLink">
+                <a href="#" id="linkMostrarRegistro">¿No tenés cuenta? Registrate</a>
+                <a href="#" id="linkMostrarLogin" style="display:none;">Ya tengo cuenta, iniciar sesión</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="pantallaPendiente" class="authScreen" style="display:none;">
+        <div class="authBox">
+            <h1>⏳ Cuenta pendiente</h1>
+            <p>Tu cuenta fue creada, pero todavía no fue aprobada por un administrador. Pedile que la apruebe para poder ingresar.</p>
+            <button id="btnLogoutPendiente">Cerrar sesión</button>
+        </div>
+    </div>
+
+    <div id="modalAdmin" class="modalScanner">
+        <div class="scannerBox">
+            <div class="scannerHeader">
+                <h2>👤 Usuarios pendientes</h2>
+                <button id="cerrarModalAdmin">✖</button>
+            </div>
+            <div id="listaPendientes" class="listaPendientes"></div>
+        </div>
+    </div>
+
+    <div class="contenedor" id="appContenido" style="display:none;">
 
         <header class="app-header">
             <h1>🧪 StockLab</h1>
+            <div class="headerAcciones">
+                <button id="btnAdminPanel" class="btnHeader" style="display:none;">👤 Usuarios</button>
+                <button id="btnLogout" class="btnHeader">🚪 Salir</button>
+            </div>
         </header>
 
         <main>
@@ -332,6 +393,12 @@
 
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+
     <script src="js/productos.js"></script>
     <script src="js/categorias.js"></script>
     <script src="js/codigos.js"></script>
@@ -349,5 +416,4 @@
 
 </body>
 
-</html>
-
+    </html>
