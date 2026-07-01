@@ -233,13 +233,11 @@ input:focus-visible {
 
 #movimientos.contenido {
     display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    flex-direction: column;
     gap: 20px;
 }
 
 .panel-izquierdo {
-    flex: 0 0 320px;
     background: var(--bg-panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -252,12 +250,17 @@ input:focus-visible {
     font-weight: 600;
     font-size: 1.15rem;
     color: var(--text);
-    padding: 20px 22px;
+    padding: 18px 22px;
     cursor: pointer;
     list-style: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid transparent;
+}
+
+.panel-izquierdo[open] > summary {
+    border-bottom-color: var(--border);
 }
 
 .panel-izquierdo > summary::-webkit-details-marker {
@@ -280,11 +283,75 @@ input:focus-visible {
 }
 
 .panel-izquierdo-body {
-    padding: 0 22px 22px;
+    padding: 22px;
+}
+
+/* grilla de campos: se acomoda sola según el ancho disponible */
+.campos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 16px 18px;
+    margin-bottom: 18px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    margin: 0 0 6px;
+}
+
+.campo input,
+.campo select {
+    margin: 0;
+}
+
+.campo-full {
+    grid-column: 1 / -1;
+    margin-bottom: 18px;
+}
+
+.fila-codigo {
+    display: flex;
+    gap: 10px;
+}
+
+.fila-codigo input {
+    flex: 1;
+}
+
+.fila-codigo button {
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    white-space: nowrap;
+}
+
+#componentesReactivo.campos-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+}
+
+.btn-principal {
+    font-size: 0.95rem;
+    padding: 13px 16px;
+}
+
+.campos-grid-acciones {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    align-items: end;
+}
+
+.campo-boton-solo {
+    justify-content: flex-end;
+}
+
+.campo-boton-solo button {
+    margin-top: 0;
 }
 
 .panel-derecho {
-    flex: 1 1 640px;
     background: var(--bg-panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -743,12 +810,14 @@ small {
         padding: 12px 14px;
     }
 
-    #movimientos.contenido {
-        flex-direction: column;
+    .campos-grid,
+    #componentesReactivo.campos-grid,
+    .campos-grid-acciones {
+        grid-template-columns: 1fr;
     }
 
-    .panel-izquierdo {
-        flex: 1 1 auto;
+    .panel-izquierdo-body {
+        padding: 18px;
     }
 
     .panel-derecho,
@@ -810,6 +879,14 @@ small {
 @media (max-width: 480px) {
     .card {
         flex-basis: 62vw;
+    }
+
+    .fila-codigo {
+        flex-direction: column;
+    }
+
+    .fila-codigo button {
+        width: 100%;
     }
 }
 
