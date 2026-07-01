@@ -1,3 +1,4 @@
+alert("scanner_ios cargado");
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
