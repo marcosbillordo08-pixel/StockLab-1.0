@@ -3,9 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0d1114">
     <title>StockLab</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -13,356 +15,276 @@
 
     <div class="contenedor">
 
-        <h1>🧪 StockLab</h1>
+        <header class="app-header">
+            <h1>🧪 StockLab</h1>
+        </header>
 
-        <div class="dashboard">
+        <main>
 
-    <div class="card">
+            <div class="dashboard">
 
-        <h3>📦 Stock Total</h3>
+                <div class="card">
+                    <h3>📦 Stock Total</h3>
+                    <span id="cardStock">0</span>
+                </div>
 
-        <span id="cardStock">0</span>
+                <div class="card">
+                    <h3>🚨 Stock Crítico</h3>
+                    <span id="cardCritico">0</span>
+                </div>
+
+                <div class="card">
+                    <h3>⏳ Por vencer</h3>
+                    <span id="cardVencer">0</span>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Movimientos</h3>
+                    <span id="cardMovimientos">0</span>
+                </div>
+
+            </div>
+
+            <nav class="tabs" aria-label="Secciones">
+                <button class="tab activo">📋 MOVIMIENTOS</button>
+                <button class="tab">📦 STOCK</button>
+                <button class="tab">⏳ POR VENCER</button>
+            </nav>
+
+            <div id="movimientos" class="contenido">
+
+                <details class="panel-izquierdo" open>
+
+                    <summary>📋 Movimiento</summary>
+
+                    <div class="panel-izquierdo-body">
+
+                        <label>Tipo</label>
+                        <select id="tipo">
+                            <option>ENTRADA</option>
+                            <option>SALIDA</option>
+                        </select>
+
+                        <label>Categoria</label>
+                        <select id="categoria">
+                            <option>REACTIVOS</option>
+                            <option>INSUMOS</option>
+                            <option>MATERIALES</option>
+                        </select>
+
+                        <label>Producto</label>
+                        <select id="producto">
+
+                        </select>
+
+                        <label>Marca</label>
+                        <select id="marca">
+
+                        </select>
+
+                        <label>Presentación</label>
+
+                        <select id="presentacion">
+                            <option value="Caja">Caja</option>
+                            <option value="Frasco">Frasco</option>
+                            <option value="Kits">Kits</option>
+                            <option value="Bolsa">Bolsa</option>
+                            <option value="Sobre">Sobre</option>
+                            <option value="Botella">Botella</option>
+                            <option value="Bidón">"Bidón"</option>
+                            <option value="Unidad">Unidad</option>
+                        </select>
+
+                        <label id="lblTipoReactivo" style="display:none;">
+                            Tipo de reactivo
+                        </label>
+
+                        <select id="tipoReactivo" style="display:none;">
+                            <option value="A">Reactivo A</option>
+                            <option value="B">Reactivo B</option>
+                            <option value="AB">Reactivo A-B</option>
+                        </select>
+
+                        <div id="componentesReactivo" style="display:none;">
+
+                            <label id="lblR1">Reactivo R1</label>
+                            <input type="number" id="cantidadR1" min="0" value="0">
+
+                            <label id="lblR2">Reactivo R2</label>
+                            <input type="number" id="cantidadR2" min="0" value="0">
+
+                        </div>
+
+                        <label>Código de barras</label>
+
+                        <input type="text" id="codigoBarras" placeholder="Escanee aquí...">
+
+                        <button id="btnEscanear">
+                            📷 Escanear
+                        </button>
+
+                        <div id="modalScanner" class="modalScanner">
+                            <div class="scannerBox">
+                                <div class="scannerHeader">
+                                    <h2>📷 Escanear código de barras</h2>
+                                    <button id="cerrarScanner">✖</button>
+                                </div>
+                                <div id="reader"></div>
+                            </div>
+                        </div>
+
+                        <small id="mensajeCodigo"></small>
+
+                        <label>Cod. Ref.</label>
+                        <input type="text" id="codigoReferencia" readonly>
+
+                        <label>Lote</label>
+                        <input id="lote" type="text">
+
+                        <label>Vencimiento</label>
+                        <input id="vencimiento" type="date">
+
+                        <label>Cantidad</label>
+                        <input id="cantidad" type="number" value="1" min="1">
+
+                        <div id="panelComponenteSalida" style="display:none;">
+                            <label>Componente</label>
+                            <select id="componenteSalida">
+                                <option value="R1">Reactivo R1</option>
+                                <option value="R2">Reactivo R2</option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <button id="btnAgregar">
+                            ➕ Agregar Movimiento
+                        </button>
+
+                        <label>Exportar reporte</label>
+
+                        <select id="filtroPDF">
+                            <option value="TODOS">TODOS</option>
+                            <option value="REACTIVOS">REACTIVOS</option>
+                            <option value="INSUMOS">INSUMOS</option>
+                            <option value="MATERIALES">MATERIALES</option>
+                        </select>
+
+                        <button id="btnPDF">
+                            📄 Exportar PDF
+                        </button>
+
+                        <button id="btnExportar">
+                            💾 Exportar respaldo
+                        </button>
+
+                        <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
+
+                        <button id="btnImportar">
+                            📂 Restaurar respaldo
+                        </button>
+
+                    </div>
+
+                </details>
+
+                <div class="panel-derecho">
+
+                    <h2>📄 Historial de Movimientos</h2>
+
+                    <div class="tabla-scroll">
+                        <table id="tablaMovimientos">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Categoría</th>
+                                    <th>Producto</th>
+                                    <th>Marca</th>
+                                    <th>Cod. Ref.</th>
+                                    <th>Cód. Barras</th>
+                                    <th>Presentación</th>
+                                    <th>Tipo Reactivo</th>
+                                    <th>R1</th>
+                                    <th>R2</th>
+                                    <th>Lote</th>
+                                    <th>Vencimento</th>
+                                    <th>Cantidad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="stock" class="contenido" style="display:none;">
+
+                <h2>📦 Stock</h2>
+
+                <label>Categoría</label>
+                <select id="categoriaStock">
+                    <option>REACTIVOS</option>
+                    <option>INSUMOS</option>
+                    <option>MATERIALES</option>
+                </select>
+
+                <label>Buscar</label>
+                <input type="text" id="buscarStock" placeholder="Buscar producto...">
+
+                <div class="tabla-scroll">
+                    <table id="tablaStock">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Marca</th>
+                                <th>Presentación</th>
+                                <th>Cantidad</th>
+                                <th>R1</th>
+                                <th>R2</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="vencimientos" class="contenido" style="display:none;">
+
+                <h2>⏳ Productos por vencer</h2>
+
+                <input type="text" id="buscarVencimiento" placeholder="🔍 Buscar reactivo...">
+
+                <div class="tabla-scroll">
+                    <table id="tablaVencimientos">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Marca</th>
+                                <th>Lote</th>
+                                <th>Vencimiento</th>
+                                <th>Días restantes</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </main>
 
     </div>
-
-    <div class="card">
-
-        <h3>🚨 Stock Crítico</h3>
-
-        <span id="cardCritico">0</span>
-
-    </div>
-
-    <div class="card">
-
-        <h3>⏳ Por vencer</h3>
-
-        <span id="cardVencer">0</span>
-
-    </div>
-
-    <div class="card">
-
-        <h3>📋 Movimientos</h3>
-
-        <span id="cardMovimientos">0</span>
-
-    </div>
-
-</div>
-
-        <div class="tabs">
-
-            <button class="tab activo">📋 MOVIMIENTOS</button>
-
-            <button class="tab">📦 STOCK</button>
-            
-            <button class="tab">⏳ POR VENCER</button>
-
-        </div>
-
-        <div id="movimientos" class="contenido">
-
-    <div class="panel-izquierdo">
-
-    <h2>📋 Movimiento</h2>
-    
-    <label>Tipo</label>
-    <select id="tipo">
-       <option>ENTRADA</option>
-       <option>SALIDA</option>
-    </select>
-
-    <label>Categoria</label>
-    <select id="categoria">
-        <option>REACTIVOS</option>
-        <option>INSUMOS</option>
-        <option>MATERIALES</option>
-    </select>
-
-    <label>Producto</label>
-    <select id="producto">
-
-    </select>
-
-    <label>Marca</label>
-    <select id="marca">
-
-    </select>
-
-    <label>Presentación</label>
-
-    <select id="presentacion">
-
-        <option value="Caja">Caja</option>
-        <option value="Frasco">Frasco</option>
-        <option value="Kits">Kits</option>
-        <option value="Bolsa">Bolsa</option>
-        <option value="Sobre">Sobre</option>
-        <option value="Botella">Botella</option>
-        <option value="Bidón">"Bidón"</option>
-        <option value="Unidad">Unidad</option>
-
-    </select>
-
-    <label id="lblTipoReactivo" style="display:none;">
-        Tipo de reactivo
-    </label>
-
-    <select id="tipoReactivo" style="display:none;">
-
-        <option value="A">Reactivo A</option>
-
-        <option value="B">Reactivo B</option>
-
-        <option value="AB">Reactivo A-B</option>
-
-    </select>
-
-    <div id="componentesReactivo" style="display:none;">
-
-        <label id="lblR1">Reactivo R1</label>
-
-        <input
-            type="number"
-            id="cantidadR1"
-            min="0"
-            value="0">
-
-        <label id="lblR2">Reactivo R2</label>
-
-        <input
-            type="number"
-            id="cantidadR2"
-            min="0"
-        value="0">
-
-    </div>
-
-    <label>Código de barras</label>
-
-        <input
-           type="text"
-           id="codigoBarras"
-           placeholder="Escanee aquí...">
-
-        <button id="btnEscanear">
-          📷 Escanear
-        </button>
-        <div id="modalScanner" class="modalScanner">
-
-            <div class="scannerBox">
-
-                <div class="scannerHeader">
-
-                    <h2>📷 Escanear código de barras</h2>
-
-                         <button id="cerrarScanner">✖</button>
-
-                      </div>
-
-                      <div id="reader"></div>
-
-               </div>
-
-        </div>
-
-        <small id="mensajeCodigo" style="color:#bbbbbb;"></small>
-
-    <label>Cod. Ref.</label>
-    <input type="text"id="codigoReferencia"readonly>
-
-    
-
-    <label>Lote</label>
-    <input id="lote" type="text">
-
-    <label>Vencimiento</label>
-    <input id="vencimiento" type="date">
-
-    <label>Cantidad</label>
-    <input id="cantidad" type="number" value="1" min="1">
-
-    <div id="panelComponenteSalida" style="display:none;">
-
-        <label>Componente</label>
-
-            <select id="componenteSalida">
-
-            <option value="R1">Reactivo R1</option>
-
-            <option value="R2">Reactivo R2</option>
-
-        </select>
-
-
-
-</div>
-    
-    <hr>
-
-    <button id="btnAgregar">
-        ➕ Agregar Movimiento
-    </button>
-
-    <label>Exportar reporte</label>
-
-    <select id="filtroPDF">
-
-        <option value="TODOS">TODOS</option>
-
-        <option value="REACTIVOS">REACTIVOS</option>
-
-        <option value="INSUMOS">INSUMOS</option>
-
-        <option value="MATERIALES">MATERIALES</option>
-
-    </select>
-
-    <button id="btnPDF">
-        📄 Exportar PDF
-    </button>
-
-    <button id="btnExportar">
-        💾 Exportar respaldo
-    </button>
-
-    <input
-        type="file"
-        id="archivoRespaldo"
-        accept=".json"
-        style="display:none;">
-
-    <button id="btnImportar">
-        📂 Restaurar respaldo
-    </button>
-
-</div>
-
-    <div class="panel-derecho">
-
-    <h2>📄 Historial de Movimientos</h2>
-
-    <table id="tablaMovimientos">
-
-        <thead>
-
-            <tr>
-
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Tipo</th>
-                <th>Categoría</th>
-                <th>Producto</th>
-                <th>Marca</th>
-                <th>Cod. Ref.</th>
-                <th>Cód. Barras</th>
-                <th>Presentación</th>
-                <th>Tipo Reactivo</th>
-                <th>R1</th>
-                <th>R2</th>
-                <th>Lote</th>
-                <th>Vencimento</th>
-                <th>Cantidad</th>
-                <th>Acciones</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        </tbody>
-
-    </table>
-
-</div>
-
-</div>
-
-    </div>
-
-    <div id="stock" class="contenido" style="display:none;">
-
-    <h2>📦 Stock</h2>
-
-    <label>Categoría</label>
-
-    <select id="categoriaStock">
-
-       <option>REACTIVOS</option>
-       <option>INSUMOS</option>
-       <option>MATERIALES</option>
-
-    </select>
-
-    <label>Buscar</label>
-
-    <input
-        type="text"
-        id="buscarStock"
-        placeholder="Buscar producto...">
-
-    <table id="tablaStock">
-
-        <thead>
-
-            <tr>
-
-            <th>Producto</th>
-            <th>Marca</th>
-            <th>Presentación</th>
-            <th>Cantidad</th>
-            <th>R1</th>
-            <th>R2</th>
-            <th>Estado</th>
-
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        </tbody>
-
-    </table>
-
-</div>
-
-<div id="vencimientos" style="display:none;">
-
-    <h2>⏳ Productos por vencer</h2>
-
-    <input
-        type="text"
-        id="buscarVencimiento"
-        placeholder="🔍 Buscar reactivo...">
-
-    <table id="tablaVencimientos">
-
-        <thead>
-
-            <tr>
-
-                <th>Producto</th>
-                <th>Marca</th>
-                <th>Lote</th>
-                <th>Vencimiento</th>
-                <th>Días restantes</th>
-                <th>Estado</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-        </tbody>
-
-    </table>
-
-</div>
 
     <script src="js/productos.js"></script>
     <script src="js/categorias.js"></script>
@@ -378,8 +300,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
     <script src="js/scanner_ios.js"></script>
     <script src="js/pdf.js"></script>
-
-
 
 </body>
 
