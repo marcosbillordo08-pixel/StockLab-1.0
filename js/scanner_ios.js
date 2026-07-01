@@ -58,16 +58,16 @@ async function iniciarZXing(video) {
 
     try {
 
-        controls = await codeReader.decodeFromVideoDevice(
+        await codeReader.decodeFromVideoElement(
 
-            null,
             video,
 
             (result, err) => {
 
                 if (result) {
 
-                    console.log("Código leído:");
+                    alert(result.getText());
+
                     console.log(result.getText());
 
                 }
@@ -79,7 +79,8 @@ async function iniciarZXing(video) {
     } catch (e) {
 
         console.error(e);
-        alert("Error iniciando ZXing");
+
+        alert(e.message);
 
     }
 
