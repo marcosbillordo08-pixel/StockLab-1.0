@@ -271,60 +271,68 @@ tr:nth-child(even){
 
 }
 
-.modalScanner{
+/* --- SECCIÓN ESCÁNER CORREGIDA PARA MÓVILES --- */
 
-    display:none;
-
-    position:fixed;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:100%;
-
-    background:rgba(0,0,0,.75);
-
-    z-index:9999;
-
-    justify-content:center;
-
-    align-items:center;
-
+.modalScanner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .85); /* Un poco más oscuro ayuda a enfocar */
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    /* Evita que el usuario haga scroll en el fondo mientras escanea */
+    overflow: hidden; 
 }
 
-.scannerBox{
-
-    width:95%;
-
-    max-width:700px;
-
-    background:#1f1f1f;
-
-    border-radius:15px;
-
-    padding:15px;
-
+.scannerBox {
+    width: 90%;
+    max-width: 500px; /* Reducimos el ancho máximo para que sea más estilizado en celulares */
+    background: #1f1f1f;
+    border-radius: 15px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
-.scannerHeader{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:15px;
-
+.scannerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-#reader{
+.scannerHeader h2 {
+    margin: 0;
+    font-size: 18px; /* Ajustamos el tamaño para que no se rompa en pantallas chicas */
+}
 
-    width:100%;
-    height:450px;
-    background:#000;
-    border-radius:10px;
-    overflow:hidden;
+#cerrarScanner {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
+#reader {
+    width: 100%;
+    /* CAMBIO CRUCIAL: Usamos 'aspect-ratio' en lugar de un alto fijo */
+    aspect-ratio: 4 / 3; 
+    max-height: 60vh; /* Se adapta dinámicamente al alto de la pantalla del iPhone */
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Forzamos que el elemento de video ocupe exactamente el espacio del contenedor */
+#reader video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; /* Recorta los bordes de la cámara para que llene el contenedor sin deformarse */
 }
