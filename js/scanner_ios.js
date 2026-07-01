@@ -10,13 +10,16 @@ btnEscanear.onclick = abrirScanner;
 btnCerrar.onclick = cerrarScanner;
 
 function logEstado(mensaje) {
+function logEstado(mensaje) {
 
     console.log(mensaje);
 
     const estado = document.getElementById("mensajeCodigo");
 
     if (estado) {
-        estado.textContent = mensaje;
+
+        estado.innerHTML += mensaje + "<br>";
+
     }
 
 }
