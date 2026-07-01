@@ -1,11 +1,11 @@
-// Inicialización global usando la librería unificada
-let codeReader = new ZXing.BrowserMultiFormatReader();
-let controls = null;
-let stream = null;
+// Inicialización compatible con la librería unificada
+const codeReader = new ZXing.BrowserMultiFormatReader();
 
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
+
+// ... abajo sigue tu función abrirScanner() y cerrarScanner() como las corregimos antes
 
 // ... (El resto del código corregido que te pasé en la respuesta anterior)
 
