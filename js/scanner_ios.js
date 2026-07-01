@@ -1,4 +1,3 @@
-alert("scanner_ios cargado");
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
@@ -6,11 +5,11 @@ const modal = document.getElementById("modalScanner");
 let stream = null;
 let codeReader = null;
 let controls = null;
+let codigoYaDetectado = false;
 
 btnEscanear.onclick = abrirScanner;
 btnCerrar.onclick = cerrarScanner;
 
-function logEstado(mensaje) {
 function logEstado(mensaje) {
 
     console.log(mensaje);
@@ -26,6 +25,8 @@ function logEstado(mensaje) {
 }
 
 async function abrirScanner() {
+
+    codigoYaDetectado = false;
 
     logEstado("📷 Abriendo cámara...");
 
@@ -69,7 +70,7 @@ async function abrirScanner() {
 
         console.error(e);
 
-        logEstado("❌ Error al abrir la cámara");
+        logEstado("❌ Error al abrir la cámara: " + e.message);
 
     }
 
@@ -81,7 +82,7 @@ async function iniciarZXing(video) {
 
     try {
 
-        codeReader = new ZXing.BrowserMultiFormatReader();
+        codeReader = new ZXingBrowser.BrowserMultiFormatReader();
 
         logEstado("✅ ZXing cargado");
 
@@ -93,11 +94,23 @@ async function iniciarZXing(video) {
 
             (result, err) => {
 
-                if (result) {
+                if (result && !codigoYaDetectado) {
 
-                    logEstado("📦 Código detectado");
+                    codigoYaDetectado = true;
 
-                    console.log(result.getText());
+                    let codigo = result.getText();
+
+                    codigo = limpiarCodigoBarras(codigo);
+
+                    logEstado("📦 Código detectado: " + codigo);
+
+                    const campoCodigoBarras = document.getElementById("codigoBarras");
+
+                    campoCodigoBarras.value = codigo;
+
+                    buscarProductoPorCodigo(codigo);
+
+                    cerrarScanner();
 
                 }
 
@@ -116,7 +129,7 @@ async function iniciarZXing(video) {
 
         console.error(e);
 
-        logEstado("❌ Error iniciando ZXing");
+        logEstado("❌ Error iniciando ZXing: " + e.message);
 
     }
 
