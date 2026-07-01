@@ -1,6 +1,13 @@
+// Inicialización global usando la librería unificada
+let codeReader = new ZXing.BrowserMultiFormatReader();
+let controls = null;
+let stream = null;
+
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
+
+// ... (El resto del código corregido que te pasé en la respuesta anterior)
 
 // Asegúrate de inicializar codeReader globalmente si no lo hacías antes, por ejemplo:
 // const codeReader = new ZXing.BrowserBarcodeReader();
