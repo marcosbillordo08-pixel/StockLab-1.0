@@ -40,11 +40,14 @@ async function abrirScanner() {
             autoplay
             playsinline
             muted
+            disablePictureInPicture
             style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
         </video>
     `;
 
     const video = document.getElementById("videoScanner");
+
+    video.disablePictureInPicture = true;
 
     try {
 
@@ -139,28 +142,88 @@ function cerrarScanner() {
 
     logEstado("🛑 Cerrando escáner...");
 
-    if (controls) {
+    try {
 
-        controls.stop();
-        controls = null;
+        if (document.pictureInPictureElement) {
+
+            document.exitPictureInPicture();
+
+        }
+
+    } catch (e) {
+
+        console.error("Error saliendo de picture-in-picture:", e);
+
+    }
+
+    try {
+
+        const video = document.getElementById("videoScanner");
+
+        if (video) {
+
+            video.pause();
+            video.srcObject = null;
+
+        }
+
+    } catch (e) {
+
+        console.error("Error deteniendo el video:", e);
 
     }
 
-    if (codeReader) {
+    try {
 
-        codeReader.reset();
-        codeReader = null;
+        if (controls) {
+
+            controls.stop();
+
+        }
+
+    } catch (e) {
+
+        console.error("Error deteniendo controls:", e);
 
     }
 
-    if (stream) {
+    controls = null;
 
-        stream.getTracks().forEach(track => track.stop());
-        stream = null;
+    try {
+
+        if (codeReader) {
+
+            codeReader.reset();
+
+        }
+
+    } catch (e) {
+
+        console.error("Error reseteando codeReader:", e);
 
     }
+
+    codeReader = null;
+
+    try {
+
+        if (stream) {
+
+            stream.getTracks().forEach(track => track.stop());
+
+        }
+
+    } catch (e) {
+
+        console.error("Error deteniendo stream:", e);
+
+    }
+
+    stream = null;
 
     modal.style.display = "none";
+
+    document.getElementById("reader").innerHTML = "";
 
     logEstado("✅ Escáner cerrado");
 
