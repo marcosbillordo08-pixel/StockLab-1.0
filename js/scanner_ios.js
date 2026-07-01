@@ -60,7 +60,7 @@ async function abrirScanner() {
 
 async function iniciarZXing(video){
 
-    codeReader = new ZXing.BrowserMultiFormatReader();
+    console.log(Object.keys(ZXing));
 
     try{
 
