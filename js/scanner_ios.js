@@ -14,6 +14,8 @@ async function abrirScanner() {
     modal.style.display = "flex";
 
     const reader = document.getElementById("reader");
+    console.log(codeReader);
+    console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(codeReader)));
 
     reader.innerHTML = `
         <video
