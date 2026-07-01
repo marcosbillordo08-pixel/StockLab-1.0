@@ -1,7 +1,6 @@
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
-const inputCodigoBarras = document.getElementById("codigoBarras");
 
 let stream = null;
 let codeReader = null;
@@ -10,11 +9,26 @@ let controls = null;
 btnEscanear.onclick = abrirScanner;
 btnCerrar.onclick = cerrarScanner;
 
+function logEstado(mensaje) {
+
+    console.log(mensaje);
+
+    const estado = document.getElementById("mensajeCodigo");
+
+    if (estado) {
+        estado.textContent = mensaje;
+    }
+
+}
+
 async function abrirScanner() {
+
+    logEstado("📷 Abriendo cámara...");
 
     modal.style.display = "flex";
 
     const reader = document.getElementById("reader");
+
     reader.innerHTML = `
         <video
             id="videoScanner"
@@ -28,80 +42,109 @@ async function abrirScanner() {
     const video = document.getElementById("videoScanner");
 
     try {
+
         stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                facingMode: { ideal: "environment" }
+                facingMode: {
+                    ideal: "environment"
+                }
             }
         });
 
+        logEstado("✅ Cámara iniciada");
+
         video.srcObject = stream;
+
         await video.play();
+
+        logEstado("🎯 Enfocando cámara...");
 
         iniciarZXing(video);
 
     } catch (e) {
+
         console.error(e);
 
-        // en iOS, getUserMedia solo funciona si la página se sirve por HTTPS (o localhost)
-        if (location.protocol !== "https:" && location.hostname !== "localhost") {
-            alert("La cámara solo funciona si la página se abre por HTTPS. Actualmente está en: " + location.protocol);
-        } else if (e.name === "NotAllowedError") {
-            alert("No se dio permiso para usar la cámara. Revisá los permisos de Safari para este sitio.");
-        } else {
-            alert("No se pudo abrir la cámara: " + e.message);
-        }
+        logEstado("❌ Error al abrir la cámara");
+
     }
+
 }
 
 async function iniciarZXing(video) {
 
-    // el paquete @zxing/browser expone su API global como "ZXingBrowser", no como "ZXing"
-    // (ese era el bug: ZXing nunca existió, por eso saltaba el alert apenas abría la cámara)
-    codeReader = new ZXingBrowser.BrowserMultiFormatReader();
+    logEstado("🔍 Iniciando ZXing...");
 
     try {
-        const result = await codeReader.decodeFromVideoElement(video);
 
-        if (result) {
-            const texto = result.getText();
-            console.log("Código detectado:", texto);
+        codeReader = new ZXing.BrowserMultiFormatReader();
 
-            inputCodigoBarras.value = texto;
+        logEstado("✅ ZXing cargado");
 
-            const mensaje = document.getElementById("mensajeCodigo");
-            if (mensaje) {
-                mensaje.textContent = "✅ Código leído: " + texto;
-                mensaje.style.color = "";
+        controls = await codeReader.decodeFromVideoDevice(
+
+            null,
+
+            video,
+
+            (result, err) => {
+
+                if (result) {
+
+                    logEstado("📦 Código detectado");
+
+                    console.log(result.getText());
+
+                }
+
+                if (err) {
+
+                    // No mostramos errores continuamente
+                    // porque ZXing genera muchos mientras busca.
+
+                }
+
             }
 
-            cerrarScanner();
-
-            // dispara el evento 'input' por si tu app.js escucha cambios en el campo
-            inputCodigoBarras.dispatchEvent(new Event("input", { bubbles: true }));
-        }
+        );
 
     } catch (e) {
+
         console.error(e);
-        alert("No se pudo leer el código: " + e.message);
+
+        logEstado("❌ Error iniciando ZXing");
+
     }
+
 }
 
 function cerrarScanner() {
 
+    logEstado("🛑 Cerrando escáner...");
+
     if (controls) {
+
         controls.stop();
         controls = null;
+
     }
 
     if (codeReader) {
+
         codeReader.reset();
         codeReader = null;
+
     }
 
     if (stream) {
+
         stream.getTracks().forEach(track => track.stop());
         stream = null;
+
     }
 
     modal.style.display = "none";
+
+    logEstado("✅ Escáner cerrado");
+
 }
