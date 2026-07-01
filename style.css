@@ -351,6 +351,35 @@ input:focus-visible {
     margin-top: 0;
 }
 
+.configWrapper {
+    position: relative;
+}
+
+.menuConfig {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    z-index: 30;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    padding: 8px;
+    min-width: 200px;
+}
+
+.menuConfig.abierto {
+    display: flex;
+}
+
+.menuConfig button {
+    margin: 0;
+    width: 100%;
+}
+
 .panel-derecho {
     background: var(--bg-panel);
     border: 1px solid var(--border);
