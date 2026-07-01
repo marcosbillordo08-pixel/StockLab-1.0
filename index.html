@@ -75,6 +75,19 @@
         <header class="app-header">
             <h1>🧪 StockLab</h1>
             <div class="headerAcciones">
+                <div class="configWrapper">
+                    <button id="btnConfig" class="btnHeader" type="button" title="Configuración">⚙️</button>
+
+                    <div id="menuConfig" class="menuConfig">
+                        <button id="btnExportar">
+                            💾 Exportar respaldo
+                        </button>
+                        <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
+                        <button id="btnImportar">
+                            📂 Restaurar respaldo
+                        </button>
+                    </div>
+                </div>
                 <button id="btnAdminPanel" class="btnHeader" style="display:none;">👤 Usuarios</button>
                 <button id="btnLogout" class="btnHeader">🚪 Salir</button>
             </div>
@@ -274,22 +287,6 @@
                                 <button id="btnPDF">
                                     📄 Exportar PDF
                                 </button>
-                            </div>
-
-                            <div class="campo campo-boton-solo configWrapper">
-                                <button id="btnConfig" type="button">
-                                    ⚙️ Configuración
-                                </button>
-
-                                <div id="menuConfig" class="menuConfig">
-                                    <button id="btnExportar">
-                                        💾 Exportar respaldo
-                                    </button>
-                                    <input type="file" id="archivoRespaldo" accept=".json" style="display:none;">
-                                    <button id="btnImportar">
-                                        📂 Restaurar respaldo
-                                    </button>
-                                </div>
                             </div>
 
                         </div>
