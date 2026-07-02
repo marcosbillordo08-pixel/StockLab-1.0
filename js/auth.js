@@ -1,7 +1,3 @@
-// ============================================================
-// StockLab - Autenticación con aprobación de administrador
-// ============================================================
-
 const pantallaLogin = document.getElementById("pantallaLogin");
 const pantallaPendiente = document.getElementById("pantallaPendiente");
 const appContenido = document.getElementById("appContenido");
