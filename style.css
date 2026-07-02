@@ -1,3 +1,12 @@
+/* ==========================================================================
+   StockLab — tema oscuro estilo panel de laboratorio
+   Paleta: fondo casi negro azulado + acento teal (vidrio de laboratorio)
+   + colores funcionales de estado (ámbar / rojo / verde)
+   Tipografía: Space Grotesk (títulos) · Inter (texto) · JetBrains Mono (datos)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 :root {
     /* superficies */
     --bg: #0d1114;
@@ -918,6 +927,20 @@ small {
     border-color: var(--border-strong);
 }
 
+/* cuando app.js muestra R1+R2 juntos (tipo de reactivo "A-B"), que queden
+   lado a lado en vez de apilados. El selector de atributo solo engancha
+   con el valor exacto que pone app.js ("display: block"); el estado
+   oculto ("display: none") no se toca. */
+#componentesReactivo[style*="display: block"] {
+    display: flex !important;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+#componentesReactivo[style*="display: block"] .campo {
+    flex: 1 1 80px;
+}
+
 /* ==========================================================================
    Menú de configuración: separador y opción de logout
    ========================================================================== */
@@ -1377,4 +1400,4 @@ small {
         transition: none !important;
         scroll-behavior: auto !important;
     }
-}
+}s
