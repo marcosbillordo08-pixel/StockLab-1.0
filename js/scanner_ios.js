@@ -34,7 +34,11 @@ async function abrirScanner() {
     try {
         stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                facingMode: { ideal: "environment" }
+                facingMode: { ideal: "environment" },
+                // pedir una resolución más chica acelera muchísimo el análisis de
+                // cada frame; 1280x720 alcanza de sobra para leer códigos de barras
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
             }
         });
 
@@ -46,7 +50,6 @@ async function abrirScanner() {
     } catch (e) {
         console.error(e);
 
-        // en iOS y Android, getUserMedia solo funciona si la página se sirve por HTTPS (o localhost)
         if (location.protocol !== "https:" && location.hostname !== "localhost") {
             alert("La cámara solo funciona si la página se abre por HTTPS. Actualmente está en: " + location.protocol);
         } else if (e.name === "NotAllowedError") {
@@ -61,17 +64,33 @@ async function abrirScanner() {
 
 async function iniciarZXing(video) {
 
+    // restringir los formatos posibles hace que el lector deje de probar QR,
+    // PDF417, Aztec, etc. en cada frame — es la mejora de velocidad más grande
+    const hints = new Map();
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+        ZXing.BarcodeFormat.CODE_128,   // GS1-128, el más común en reactivos de laboratorio
+        ZXing.BarcodeFormat.EAN_13,
+        ZXing.BarcodeFormat.EAN_8,
+        ZXing.BarcodeFormat.UPC_A,
+        ZXing.BarcodeFormat.ITF,
+        ZXing.BarcodeFormat.CODE_39,
+        ZXing.BarcodeFormat.QR_CODE,     // por si el código es un GS1 Digital Link (URL)
+        ZXing.BarcodeFormat.DATA_MATRIX  // habitual en insumos/reactivos en formato 2D
+    ]);
+
     // el paquete @zxing/browser expone su API global como "ZXingBrowser", no como "ZXing"
-    codeReader = new ZXingBrowser.BrowserMultiFormatReader();
+    codeReader = new ZXingBrowser.BrowserMultiFormatReader(hints);
 
     try {
-        // esta versión de la librería exige un callback: se ejecuta en
-        // cada frame, con (result, error, controls). No es opcional.
         controls = await codeReader.decodeFromVideoElement(video, (result, error, ctrls) => {
 
             if (result) {
-                const texto = result.getText();
-                console.log("Código detectado:", texto);
+                const textoCrudo = result.getText();
+                const formato = result.getBarcodeFormat();
+
+                const texto = extraerGTIN(textoCrudo, formato);
+
+                console.log("Código detectado (crudo):", textoCrudo, "→ usado:", texto);
 
                 inputCodigoBarras.value = texto;
 
@@ -86,14 +105,63 @@ async function iniciarZXing(video) {
                 cerrarScanner();
             }
 
-            // "error" se dispara en CADA frame donde no encuentra nada;
-            // es normal, no significa que algo falló
+            // "error" se dispara en CADA frame donde no encuentra nada; es normal
         });
 
     } catch (e) {
         console.error(e);
         alert("No se pudo iniciar el lector: " + e.message);
     }
+}
+
+/**
+ * Los códigos GS1 (típicos en reactivos/insumos de laboratorio) no traen
+ * solo el número de producto: vienen envueltos en "Application Identifiers".
+ * Por ejemplo:
+ *   wlab.ar/01/7798100043296/10/2511666600   (GS1 Digital Link, un QR o DataMatrix)
+ *   010177981000404550102507650230           (GS1-128 "crudo", sin separadores)
+ * En ambos casos, el AI "01" indica que lo que sigue es el GTIN (el código
+ * de producto real). Esta función se queda solo con eso.
+ *
+ * Los formatos EAN-13/EAN-8/UPC nunca usan AIs — se devuelven tal cual,
+ * para no romper el escaneo de un código simple que casualmente empiece con "01".
+ */
+function extraerGTIN(textoCrudo, formato) {
+
+    const formatosSinAI = [
+        ZXing.BarcodeFormat.EAN_13,
+        ZXing.BarcodeFormat.EAN_8,
+        ZXing.BarcodeFormat.UPC_A,
+        ZXing.BarcodeFormat.UPC_E
+    ];
+
+    if (formatosSinAI.includes(formato)) {
+        return textoCrudo;
+    }
+
+    // Formato GS1 Digital Link (URL): dominio/01/<GTIN>/10/<lote>/...
+    const matchUrl = textoCrudo.match(/\/01\/(\d+)/);
+    if (matchUrl) {
+        return normalizarGTIN(matchUrl[1]);
+    }
+
+    // Formato GS1-128 "crudo": arranca con el AI 01 seguido de 14 dígitos de GTIN
+    const matchCrudo = textoCrudo.match(/^01(\d{14})/);
+    if (matchCrudo) {
+        return normalizarGTIN(matchCrudo[1]);
+    }
+
+    // no es un patrón GS1 reconocido: se deja tal cual (código interno propio, etc.)
+    return textoCrudo;
+}
+
+function normalizarGTIN(gtin) {
+    // el "0" de relleno que convierte un EAN-13 en GTIN-14 se saca,
+    // para que quede el mismo número que tiene impreso el producto
+    if (gtin.length === 14 && gtin.startsWith("0")) {
+        return gtin.slice(1);
+    }
+    return gtin;
 }
 
 function cerrarScanner() {
