@@ -1,246 +1,119 @@
 const btnEscanear = document.getElementById("btnEscanear");
 const btnCerrar = document.getElementById("cerrarScanner");
 const modal = document.getElementById("modalScanner");
+const inputCodigoBarras = document.getElementById("codigoBarras");
+const readerContenedor = document.getElementById("reader");
 
 let stream = null;
 let codeReader = null;
 let controls = null;
-let codigoYaDetectado = false;
 
 btnEscanear.onclick = abrirScanner;
 btnCerrar.onclick = cerrarScanner;
 
-function logEstado(mensaje) {
-
-    console.log(mensaje);
-
-    const estado = document.getElementById("mensajeCodigo");
-
-    if (estado) {
-
-        estado.innerHTML += mensaje + "<br>";
-
-    }
-
-}
-
 async function abrirScanner() {
-
-    codigoYaDetectado = false;
-
-    logEstado("📷 Abriendo cámara...");
 
     modal.style.display = "flex";
 
-    const reader = document.getElementById("reader");
+    // saca un video anterior si quedó de una apertura previa,
+    // sin tocar el marco guía (.scan-guide) ni el texto de ayuda
+    const videoViejo = document.getElementById("videoScanner");
+    if (videoViejo) {
+        videoViejo.remove();
+    }
 
-    reader.innerHTML = `
-        <video
-            id="videoScanner"
-            autoplay
-            playsinline
-            muted
-            disablePictureInPicture
-            style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
-        </video>
-        <div class="scanFrame">
-            <div class="scanFrame-corner tl"></div>
-            <div class="scanFrame-corner tr"></div>
-            <div class="scanFrame-corner bl"></div>
-            <div class="scanFrame-corner br"></div>
-            <div class="scanLine"></div>
-        </div>
-    `;
+    const video = document.createElement("video");
+    video.id = "videoScanner";
+    video.autoplay = true;
+    video.playsInline = true; // clave en iOS: evita que Safari abra el video a pantalla completa
+    video.muted = true;
 
-    const video = document.getElementById("videoScanner");
-
-    video.disablePictureInPicture = true;
+    // el video va PRIMERO, así el marco guía (position:absolute) queda dibujado encima
+    readerContenedor.insertBefore(video, readerContenedor.firstChild);
 
     try {
-
         stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                facingMode: {
-                    ideal: "environment"
-                },
-                width: {
-                    ideal: 1280
-                },
-                height: {
-                    ideal: 720
-                },
-                advanced: [
-                    { focusMode: "continuous" }
-                ]
+                facingMode: { ideal: "environment" }
             }
         });
 
-        logEstado("✅ Cámara iniciada");
-
         video.srcObject = stream;
-
         await video.play();
-
-        logEstado("🎯 Enfocando cámara...");
 
         iniciarZXing(video);
 
     } catch (e) {
-
         console.error(e);
 
-        logEstado("❌ Error al abrir la cámara: " + e.message);
-
+        // en iOS y Android, getUserMedia solo funciona si la página se sirve por HTTPS (o localhost)
+        if (location.protocol !== "https:" && location.hostname !== "localhost") {
+            alert("La cámara solo funciona si la página se abre por HTTPS. Actualmente está en: " + location.protocol);
+        } else if (e.name === "NotAllowedError") {
+            alert("No se dio permiso para usar la cámara. Revisá los permisos de tu navegador para este sitio.");
+        } else if (e.name === "NotFoundError") {
+            alert("No se encontró ninguna cámara en este dispositivo.");
+        } else {
+            alert("No se pudo abrir la cámara: " + e.message);
+        }
     }
-
 }
 
 async function iniciarZXing(video) {
 
-    logEstado("🔍 Iniciando ZXing...");
+    // el paquete @zxing/browser expone su API global como "ZXingBrowser", no como "ZXing"
+    codeReader = new ZXingBrowser.BrowserMultiFormatReader();
 
     try {
+        // esta versión de la librería exige un callback: se ejecuta en
+        // cada frame, con (result, error, controls). No es opcional.
+        controls = await codeReader.decodeFromVideoElement(video, (result, error, ctrls) => {
 
-        codeReader = new ZXingBrowser.BrowserMultiFormatReader();
+            if (result) {
+                const texto = result.getText();
+                console.log("Código detectado:", texto);
 
-        logEstado("✅ ZXing cargado");
+                inputCodigoBarras.value = texto;
 
-        controls = await codeReader.decodeFromVideoDevice(
-
-            null,
-
-            video,
-
-            (result, err) => {
-
-                if (result && !codigoYaDetectado) {
-
-                    codigoYaDetectado = true;
-
-                    let codigo = result.getText();
-
-                    codigo = limpiarCodigoBarras(codigo);
-
-                    logEstado("📦 Código detectado: " + codigo);
-
-                    const campoCodigoBarras = document.getElementById("codigoBarras");
-
-                    campoCodigoBarras.value = codigo;
-
-                    buscarProductoPorCodigo(codigo);
-
-                    cerrarScanner();
-
+                const mensaje = document.getElementById("mensajeCodigo");
+                if (mensaje) {
+                    mensaje.textContent = "✅ Código leído: " + texto;
+                    mensaje.style.color = "";
                 }
 
-                if (err) {
+                inputCodigoBarras.dispatchEvent(new Event("input", { bubbles: true }));
 
-                    // No mostramos errores continuamente
-                    // porque ZXing genera muchos mientras busca.
-
-                }
-
+                cerrarScanner();
             }
 
-        );
+            // "error" se dispara en CADA frame donde no encuentra nada;
+            // es normal, no significa que algo falló
+        });
 
     } catch (e) {
-
         console.error(e);
-
-        logEstado("❌ Error iniciando ZXing: " + e.message);
-
+        alert("No se pudo iniciar el lector: " + e.message);
     }
-
 }
 
 function cerrarScanner() {
 
-    logEstado("🛑 Cerrando escáner...");
-
-    try {
-
-        if (document.pictureInPictureElement) {
-
-            document.exitPictureInPicture();
-
-        }
-
-    } catch (e) {
-
-        console.error("Error saliendo de picture-in-picture:", e);
-
-    }
-
-    try {
-
-        const video = document.getElementById("videoScanner");
-
-        if (video) {
-
-            video.pause();
-            video.srcObject = null;
-
-        }
-
-    } catch (e) {
-
-        console.error("Error deteniendo el video:", e);
-
-    }
-
-    try {
-
-        if (controls) {
-
-            controls.stop();
-
-        }
-
-    } catch (e) {
-
-        console.error("Error deteniendo controls:", e);
-
-    }
-
-    controls = null;
-
-    try {
-
-        if (codeReader) {
-
-            codeReader.reset();
-
-        }
-
-    } catch (e) {
-
-        console.error("Error reseteando codeReader:", e);
-
+    if (controls) {
+        controls.stop();
+        controls = null;
     }
 
     codeReader = null;
 
-    try {
-
-        if (stream) {
-
-            stream.getTracks().forEach(track => track.stop());
-
-        }
-
-    } catch (e) {
-
-        console.error("Error deteniendo stream:", e);
-
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
     }
 
-    stream = null;
+    const video = document.getElementById("videoScanner");
+    if (video) {
+        video.remove();
+    }
 
     modal.style.display = "none";
-
-    document.getElementById("reader").innerHTML = "";
-
-    logEstado("✅ Escáner cerrado");
-
 }
