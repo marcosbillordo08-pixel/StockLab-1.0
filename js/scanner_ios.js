@@ -94,13 +94,13 @@ async function iniciarZXing(video) {
 
                 inputCodigoBarras.value = texto;
 
-                const mensaje = document.getElementById("mensajeCodigo");
-                if (mensaje) {
-                    mensaje.textContent = "✅ Código leído: " + texto;
-                    mensaje.style.color = "";
-                }
-
-                inputCodigoBarras.dispatchEvent(new Event("input", { bubbles: true }));
+                // se dispara "change" (no "input") a propósito: es el evento que
+                // escucha app.js para correr limpiarCodigoBarras() y sobre todo
+                // buscarProductoPorCodigo(), que autocompleta Marca, Presentación,
+                // Tipo de Reactivo, R1/R2 y el mensaje de encontrado/no encontrado.
+                // Así el escaneo por cámara se comporta igual que si lo tipeara
+                // una pistola lectora física.
+                inputCodigoBarras.dispatchEvent(new Event("change", { bubbles: true }));
 
                 cerrarScanner();
             }
