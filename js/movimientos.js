@@ -4,8 +4,8 @@ const boton = document.getElementById("btnAgregar");
 
 boton.addEventListener("click", agregarMovimiento);
 
-function agregarMovimiento() {
-    
+async function agregarMovimiento() {
+
     const componenteSalida = document.getElementById("componenteSalida").value;
     const tipo = document.getElementById("tipo").value;
     const categoria = document.getElementById("categoria").value;
@@ -71,7 +71,7 @@ function agregarMovimiento() {
 
         let stockActual = 0;
 
-        movimientos.forEach(function(movimiento) {
+        movimientos.forEach(function (movimiento) {
 
             if (movimiento.producto === producto) {
 
@@ -97,103 +97,122 @@ function agregarMovimiento() {
 
     const movimiento = {
 
-    id: Date.now(),
+        id: Date.now(),
 
-    fecha: new Date().toLocaleDateString(),
+        fecha: new Date().toLocaleDateString(),
 
-    tipo: tipo,
+        tipo: tipo,
 
-    categoria: categoria,
+        categoria: categoria,
 
-    producto: producto,
+        producto: producto,
 
-    marca: marca,
+        marca: marca,
 
-    codigo: codigo,
+        codigo: codigo,
 
-    codigoBarras: codigoBarras,
+        codigoBarras: codigoBarras,
 
-    presentacion: presentacion,
+        presentacion: presentacion,
 
-    tipoReactivo: tipoReactivo,
+        tipoReactivo: tipoReactivo,
 
-    r1: r1,
+        r1: r1,
 
-    r2: r2,
+        r2: r2,
 
-    componenteSalida: componenteSalida,
+        componenteSalida: componenteSalida,
 
-    lote: lote,
+        lote: lote,
 
-    vencimiento: vencimiento,
+        vencimiento: vencimiento,
 
-    cantidad: Number(cantidad)
+        cantidad: Number(cantidad)
 
-};
+    };
 
+    boton.disabled = true;
 
-movimientos.push(movimiento);
+    try {
 
-console.log(movimientos);
+        // Se guarda en Firestore. No hace falta tocar el DOM ni el array
+        // "movimientos" acá: el listener de más abajo (onSnapshot) se entera
+        // solo del cambio y redibuja todo, en este dispositivo y en cualquier
+        // otro que tenga la página abierta.
 
-    mostrarMovimiento(movimiento);    
+        await db.collection("movimientos").doc(String(movimiento.id)).set(movimiento);
 
-    localStorage.setItem("movimientos", JSON.stringify(movimientos));
+    } catch (error) {
+
+        console.error(error);
+
+        alert("No se pudo guardar el movimiento: " + error.message);
+
+    } finally {
+
+        boton.disabled = false;
+
+    }
+
+}
+
+async function eliminarMovimiento(id) {
+
+    try {
+
+        await db.collection("movimientos").doc(String(id)).delete();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("No se pudo eliminar el movimiento: " + error.message);
+
+    }
+
+}
+
+// ============================================================
+// Sincronización en tiempo real con Firestore
+// ============================================================
+
+function renderizarTodo() {
+
+    limpiarTabla();
+
+    movimientos.forEach(function (movimiento) {
+
+        mostrarMovimiento(movimiento);
+
+    });
 
     actualizarDashboard();
 
     calcularStock();
 
-}
-
-window.addEventListener("load", cargarMovimientos);
-
-function cargarMovimientos() {
-
-    const datosGuardados = localStorage.getItem("movimientos");
-
-    if (!datosGuardados) return;
-
-    const lista = JSON.parse(datosGuardados);
-
-    console.log(lista);
-
-    lista.forEach(function(movimiento){
-
-    movimientos.push(movimiento);
-
-    mostrarMovimiento(movimiento);
-
-});
-
-calcularStock();
-
-actualizarDashboard();
+    calcularVencimientos();
 
 }
 
-function eliminarMovimiento(id) {
+db.collection("movimientos")
+    .orderBy("id", "asc")
+    .onSnapshot(function (snapshot) {
 
-    const indice = movimientos.findIndex(function(movimiento) {
-        return movimiento.id === id;
+        movimientos.length = 0;
+
+        snapshot.forEach(function (docSnap) {
+
+            movimientos.push(docSnap.data());
+
+        });
+
+        renderizarTodo();
+
+    }, function (error) {
+
+        // Es normal ver un error acá una única vez si el listener arranca
+        // antes de que termine de resolverse el login; en cuanto el usuario
+        // queda autenticado y aprobado, Firestore reintenta solo.
+        console.error("Error escuchando movimientos:", error);
+
     });
-
-    console.log(indice);
-
-    movimientos.splice(indice, 1);
-
-    console.log(movimientos);
-
-    localStorage.setItem("movimientos", JSON.stringify(movimientos));
-
-    actualizarDashboard();
-
-    limpiarTabla();
-
-    movimientos.forEach(function(movimiento){
-
-    mostrarMovimiento(movimiento);
-
-});
-
-}
