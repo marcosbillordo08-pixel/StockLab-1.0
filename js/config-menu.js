@@ -1,5 +1,8 @@
 const btnConfig = document.getElementById("btnConfig");
 const menuConfig = document.getElementById("menuConfig");
+const btnEstadisticas = document.getElementById("btnEstadisticas");
+const cerrarModalEstadisticas = document.getElementById("cerrarModalEstadisticas");
+const modalEstadisticas = document.getElementById("modalEstadisticas");
 
 btnConfig.addEventListener("click", function (e) {
 
@@ -30,10 +33,6 @@ document.getElementById("btnImportar").addEventListener("click", function () {
     menuConfig.classList.remove("abierto");
 
 });
-
-const btnEstadisticas = document.getElementById("btnEstadisticas");
-const cerrarModalEstadisticas = document.getElementById("cerrarModalEstadisticas");
-const modalEstadisticas = document.getElementById("modalEstadisticas");
 
 if (btnEstadisticas) {
     btnEstadisticas.addEventListener("click", function () {
