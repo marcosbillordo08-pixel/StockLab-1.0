@@ -329,11 +329,6 @@ input:focus-visible {
     white-space: nowrap;
 }
 
-.campos-grid-reactivo {
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    margin-bottom: 18px;
-}
-
 .btn-principal {
     font-size: 0.95rem;
     padding: 13px 16px;
@@ -1274,7 +1269,6 @@ small {
     }
 
     .campos-grid,
-    .campos-grid-reactivo,
     .campos-grid-acciones {
         grid-template-columns: 1fr;
     }
