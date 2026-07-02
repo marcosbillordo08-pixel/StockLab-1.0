@@ -723,6 +723,210 @@ small {
 }
 
 /* ==========================================================================
+   Pantallas de autenticación (login / registro / pendiente)
+   ========================================================================== */
+
+.pantalla-auth {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    padding-top: calc(24px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    background:
+        radial-gradient(circle at 15% 0%, rgba(77, 208, 196, 0.06), transparent 45%),
+        var(--bg);
+    overflow-y: auto;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+}
+
+.auth-logo {
+    text-align: center;
+    margin: 0 0 28px;
+    font-size: 1.6rem;
+}
+
+.auth-form {
+    flex-direction: column;
+    gap: 0;
+}
+
+.auth-form label {
+    margin-top: 14px;
+}
+
+.auth-form label:first-of-type {
+    margin-top: 0;
+}
+
+.auth-form .btn-principal {
+    margin-top: 22px;
+}
+
+.auth-error {
+    min-height: 18px;
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin: 10px 0 0;
+}
+
+.auth-switch {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 18px 0 0;
+}
+
+.auth-switch a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+.auth-nota {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    margin: 20px 0 0;
+    line-height: 1.4;
+}
+
+.pendiente-msg {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0 0 24px;
+}
+
+.btn-secundario {
+    background: transparent;
+    border-color: var(--border-strong);
+}
+
+/* ==========================================================================
+   Menú de configuración: separador y opción de logout
+   ========================================================================== */
+
+.menu-config-separador {
+    margin: 6px 4px;
+    border-top-color: var(--border);
+}
+
+.menu-item-logout {
+    color: var(--danger);
+}
+
+.menu-item-logout:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+/* ==========================================================================
+   Panel de administración
+   ========================================================================== */
+
+.modal-admin {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 9, 11, 0.75);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    z-index: 150;
+    padding: 20px;
+}
+
+.adminBox {
+    width: min(520px, 100%);
+    max-height: 80vh;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.adminBox .scannerHeader h2 {
+    font-size: 1rem;
+}
+
+.lista-pendientes {
+    padding: 16px 20px 20px;
+    overflow-y: auto;
+}
+
+.lista-pendientes p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.filaPendiente {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+}
+
+.filaPendiente span {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--text);
+    word-break: break-all;
+}
+
+.filaPendiente button {
+    width: auto;
+    margin: 0;
+    padding: 7px 10px;
+    font-size: 0.76rem;
+    white-space: nowrap;
+}
+
+.filaPendiente .btnAprobar {
+    border-color: var(--ok);
+    color: var(--ok);
+}
+
+.filaPendiente .btnAprobar:hover {
+    background: var(--ok-bg);
+}
+
+.filaPendiente .btnRechazar {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.filaPendiente .btnRechazar:hover {
+    background: var(--danger-bg);
+}
+
+/* ==========================================================================
    Header (sticky, con margen para el notch/Dynamic Island de iPhone)
    ========================================================================== */
 
@@ -752,6 +956,9 @@ small {
 
 .config-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-config {
