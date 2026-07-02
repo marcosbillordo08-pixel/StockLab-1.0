@@ -685,8 +685,110 @@ table td:empty::before {
 }
 
 #reader {
+    position: relative;
     padding: 18px;
     background: #000;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+#videoScanner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+
+/* marco guía: le muestra al usuario dónde centrar el código de barras */
+.scan-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 78%;
+    height: 34%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.scan-guide-esquina {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 3px solid var(--accent);
+    filter: drop-shadow(0 0 4px var(--accent-glow));
+}
+
+.esquina-tl {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 4px 0 0 0;
+}
+
+.esquina-tr {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+    border-radius: 0 4px 0 0;
+}
+
+.esquina-bl {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+    border-radius: 0 0 0 4px;
+}
+
+.esquina-br {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+    border-radius: 0 0 4px 0;
+}
+
+.scan-guide-linea {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    top: 50%;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: scan-guide-barrido 1.8s ease-in-out infinite;
+}
+
+@keyframes scan-guide-barrido {
+    0%, 100% { top: 12%; opacity: 0.9; }
+    50% { top: 88%; opacity: 0.4; }
+}
+
+.scan-guide-texto {
+    position: absolute;
+    left: 50%;
+    bottom: 10%;
+    transform: translateX(-50%);
+    z-index: 2;
+    margin: 0;
+    color: var(--text);
+    background: rgba(13, 17, 20, 0.7);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scan-guide-linea {
+        animation: none;
+        top: 50%;
+    }
 }
 
 /* ==========================================================================
@@ -1252,6 +1354,7 @@ small {
         padding: 0;
         display: flex;
         align-items: center;
+        aspect-ratio: auto;
     }
 
     /* margen inferior para el home indicator de iPhone */
