@@ -1,14 +1,18 @@
 console.log("estadisticas.js cargado");
 
 function obtenerMovimientosEstadisticas() {
-    const datos = localStorage.getItem("movimientos");
-    if (!datos) return [];
-    return JSON.parse(datos);
+    // la app no usa localStorage: los movimientos viven en la variable
+    // global `movimientos` (poblada desde Firestore), la misma que usa
+    // respaldo.js para exportar. Si esa variable no existe o cambia de
+    // nombre en tu datos.js/movimientos.js, avisame y lo ajusto.
+    if (typeof movimientos !== "undefined" && Array.isArray(movimientos)) {
+        return movimientos;
+    }
+    return [];
 }
 
 function obtenerTopMasUsados(categoriaBuscada) {
     const lista = obtenerMovimientosEstadisticas();
-
     const resumen = {};
 
     lista.forEach(function (mov) {
@@ -21,7 +25,6 @@ function obtenerTopMasUsados(categoriaBuscada) {
         if (!resumen[producto]) {
             resumen[producto] = 0;
         }
-
         resumen[producto] += cantidad;
     });
 
@@ -49,7 +52,6 @@ function crearFilasEstadisticas(lista) {
     }
 
     let html = "";
-
     lista.forEach(function (item, index) {
         html += `
             <tr>
@@ -64,6 +66,7 @@ function crearFilasEstadisticas(lista) {
 }
 
 function renderizarEstadisticas() {
+
     const topReactivos = obtenerTopMasUsados("REACTIVOS");
     const topInsumos = obtenerTopMasUsados("INSUMOS");
     const topMateriales = obtenerTopMasUsados("MATERIALES");
@@ -75,11 +78,9 @@ function renderizarEstadisticas() {
     if (tbodyReactivos) {
         tbodyReactivos.innerHTML = crearFilasEstadisticas(topReactivos);
     }
-
     if (tbodyInsumos) {
         tbodyInsumos.innerHTML = crearFilasEstadisticas(topInsumos);
     }
-
     if (tbodyMateriales) {
         tbodyMateriales.innerHTML = crearFilasEstadisticas(topMateriales);
     }
@@ -93,13 +94,11 @@ function renderizarEstadisticas() {
             ? `${topReactivos[0].producto} (${topReactivos[0].cantidad})`
             : "Sin datos";
     }
-
     if (topInsumo) {
         topInsumo.textContent = topInsumos.length
             ? `${topInsumos[0].producto} (${topInsumos[0].cantidad})`
             : "Sin datos";
     }
-
     if (topMaterial) {
         topMaterial.textContent = topMateriales.length
             ? `${topMateriales[0].producto} (${topMateriales[0].cantidad})`
@@ -110,7 +109,6 @@ function renderizarEstadisticas() {
 function abrirModalEstadisticas() {
     const modal = document.getElementById("modalEstadisticas");
     if (!modal) return;
-
     renderizarEstadisticas();
     modal.classList.add("abierto");
 }
@@ -118,7 +116,6 @@ function abrirModalEstadisticas() {
 function cerrarModalEstadisticas() {
     const modal = document.getElementById("modalEstadisticas");
     if (!modal) return;
-
     modal.classList.remove("abierto");
 }
 
