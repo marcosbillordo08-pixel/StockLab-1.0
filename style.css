@@ -351,35 +351,6 @@ input:focus-visible {
     margin-top: 0;
 }
 
-.configWrapper {
-    position: relative;
-}
-
-.menuConfig {
-    display: none;
-    flex-direction: column;
-    gap: 6px;
-    position: absolute;
-    right: 0;
-    top: calc(100% + 6px);
-    z-index: 30;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow);
-    padding: 8px;
-    min-width: 200px;
-}
-
-.menuConfig.abierto {
-    display: flex;
-}
-
-.menuConfig button {
-    margin: 0;
-    width: 100%;
-}
-
 .panel-derecho {
     background: var(--bg-panel);
     border: 1px solid var(--border);
@@ -716,91 +687,6 @@ table td:empty::before {
 #reader {
     padding: 18px;
     background: #000;
-    position: relative;
-}
-
-#reader video {
-    display: block;
-}
-
-/* cuadro de enfoque / alineación sobre el video */
-.scanFrame {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 78%;
-    max-width: 340px;
-    aspect-ratio: 5 / 2;
-    pointer-events: none;
-}
-
-.scanFrame-corner {
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    border: 3px solid var(--accent);
-}
-
-.scanFrame-corner.tl {
-    top: 0;
-    left: 0;
-    border-right: none;
-    border-bottom: none;
-    border-radius: 4px 0 0 0;
-}
-
-.scanFrame-corner.tr {
-    top: 0;
-    right: 0;
-    border-left: none;
-    border-bottom: none;
-    border-radius: 0 4px 0 0;
-}
-
-.scanFrame-corner.bl {
-    bottom: 0;
-    left: 0;
-    border-right: none;
-    border-top: none;
-    border-radius: 0 0 0 4px;
-}
-
-.scanFrame-corner.br {
-    bottom: 0;
-    right: 0;
-    border-left: none;
-    border-top: none;
-    border-radius: 0 0 4px 0;
-}
-
-.scanLine {
-    position: absolute;
-    left: 4%;
-    right: 4%;
-    height: 2px;
-    top: 6%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-    animation: scanMove 1.8s ease-in-out infinite;
-}
-
-@keyframes scanMove {
-    0%, 100% {
-        top: 6%;
-        opacity: 0.9;
-    }
-    50% {
-        top: 94%;
-        opacity: 0.5;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .scanLine {
-        animation: none;
-        top: 50%;
-    }
 }
 
 /* ==========================================================================
@@ -853,7 +739,6 @@ small {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
 }
 
 .app-header h1 {
@@ -861,111 +746,154 @@ small {
     padding: 16px 0;
 }
 
-.headerAcciones {
-    display: flex;
-    gap: 8px;
-    flex: 0 0 auto;
-}
-
-.btnHeader {
-    width: auto;
-    margin: 0;
-    padding: 8px 14px;
-    font-size: 0.78rem;
-}
-
 /* ==========================================================================
-   Pantallas de autenticación (login / registro / pendiente de aprobación)
+   Menú de configuración (⚙️)
    ========================================================================== */
 
-.authScreen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+.config-wrapper {
+    position: relative;
 }
 
-.authBox {
-    width: min(380px, 100%);
-    background: var(--bg-panel);
+.btn-config {
+    width: auto;
+    margin: 0;
+    padding: 8px 10px;
+    font-size: 1.15rem;
+    line-height: 1;
+    background: transparent;
     border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.btn-config:hover {
+    border-color: var(--accent-dim);
+    background: var(--bg-elevated);
+}
+
+.menu-config {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 220px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    padding: 28px 26px;
-    text-align: center;
-}
-
-.authBox h1 {
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.authBox p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-.authForm {
-    display: flex;
+    box-shadow: var(--shadow);
+    padding: 6px;
     flex-direction: column;
+    gap: 2px;
+    z-index: 30;
+}
+
+.menu-config.abierto {
+    display: flex;
+}
+
+.menu-config button {
+    width: 100%;
+    margin: 0;
     text-align: left;
-}
-
-.authError {
-    color: var(--danger) !important;
-    min-height: 16px;
-}
-
-.authLink {
-    margin-top: 16px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
     font-size: 0.85rem;
 }
 
-.authLink a {
+.menu-config button:hover {
+    background: rgba(77, 208, 196, 0.1);
+    border-color: transparent;
     color: var(--accent);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.authLink a:hover {
-    text-decoration: underline;
 }
 
 /* ==========================================================================
-   Panel de administración de usuarios
+   Modal de Estadísticas
    ========================================================================== */
 
-.listaPendientes {
-    padding: 18px;
+.modal-estadisticas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 9, 11, 0.75);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+.modal-estadisticas.abierto {
+    display: flex;
+}
+
+.estadisticasBox {
+    width: min(920px, 100%);
+    max-height: 88vh;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    max-height: 60vh;
+}
+
+.estadisticasBox .scannerHeader h2 {
+    font-size: 1rem;
+}
+
+.estadisticas-body {
+    padding: 20px 22px 22px;
     overflow-y: auto;
 }
 
-.filaPendiente {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.stats-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.stats-resumen-item {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 10px 12px;
+    padding: 14px 16px;
 }
 
-.filaPendiente span {
-    flex: 1;
-    font-size: 0.88rem;
-    word-break: break-all;
+.stats-resumen-item h3 {
+    margin-bottom: 6px;
 }
 
-.filaPendiente button {
-    width: auto;
-    margin: 0;
-    padding: 6px 10px;
-    font-size: 0.75rem;
+.stats-resumen-item span {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.95rem;
+}
+
+.stats-tablas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.stats-tabla-col h3 {
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+
+.sin-datos {
+    text-align: center;
+    color: var(--text-faint);
+    font-family: 'Inter', sans-serif;
+    padding: 16px !important;
 }
 
 /* ==========================================================================
@@ -1086,6 +1014,30 @@ small {
 
     .scannerHeader {
         padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    }
+
+    /* modal de estadísticas casi pantalla completa en mobile */
+    .modal-estadisticas {
+        padding: 0;
+    }
+
+    .estadisticasBox {
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+    }
+
+    .estadisticasBox .scannerHeader {
+        padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    }
+
+    .stats-tablas {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-config {
+        min-width: 200px;
     }
 
     #reader {
