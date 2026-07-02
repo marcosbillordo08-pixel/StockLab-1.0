@@ -1,5 +1,3 @@
-// Configuración de tu proyecto de Firebase (stocklab-4e30e)
-
 const firebaseConfig = {
     apiKey: "AIzaSyC21cJIHv1sEBQ2WVgBB_b3OG8rklNhJmg",
     authDomain: "stocklab-4e30e.firebaseapp.com",
