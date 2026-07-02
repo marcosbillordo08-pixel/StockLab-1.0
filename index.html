@@ -226,24 +226,6 @@
 
                         </div>
 
-                        <div id="componentesReactivo" style="display:none;">
-
-                            <div class="campos-grid campos-grid-reactivo">
-
-                                <div class="campo">
-                                    <label id="lblR1">Reactivo R1</label>
-                                    <input type="number" id="cantidadR1" min="0" value="0">
-                                </div>
-
-                                <div class="campo">
-                                    <label id="lblR2">Reactivo R2</label>
-                                    <input type="number" id="cantidadR2" min="0" value="0">
-                                </div>
-
-                            </div>
-
-                        </div>
-
                         <div class="campo campo-full">
                             <label>Código de barras</label>
 
@@ -278,6 +260,20 @@
                         </div>
 
                         <div class="campos-grid">
+
+                            <div id="componentesReactivo" style="display:none;">
+
+                                <div class="campo">
+                                    <label id="lblR1">Reactivo R1</label>
+                                    <input type="number" id="cantidadR1" min="0" value="0">
+                                </div>
+
+                                <div class="campo">
+                                    <label id="lblR2">Reactivo R2</label>
+                                    <input type="number" id="cantidadR2" min="0" value="0">
+                                </div>
+
+                            </div>
 
                             <div class="campo">
                                 <label>Cod. Ref.</label>
@@ -567,6 +563,7 @@
          y firebase-config.js ya cargado -->
     <script src="js/auth.js"></script>
 
+    <script src="https://unpkg.com/@zxing/library@0.20.0"></script>
     <script src="https://unpkg.com/@zxing/browser@0.1.5"></script>
     <script src="js/scanner_ios.js"></script>
     <!-- jsPDF + autoTable, necesarios para js/pdf.js -->
