@@ -9,6 +9,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="style.css">
+
+    <!-- Twemoji: dibuja los emojis como imágenes propias en vez de depender
+         de la fuente de emojis del sistema operativo (Windows 7 no la trae) -->
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@17.0.3/dist/twemoji.min.js"
+        integrity="sha384-Y5xukbGJwykbHHkTbLJykYLcBPFxrwipTbEh0puxhkz9CZ90raTPGe2Ks4vCxsYU"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -570,6 +576,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.0.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/5.0.2/jspdf.plugin.autotable.min.js"></script>
     <script src="js/pdf.js"></script>
+
+    <!-- va al final para agarrar todo el contenido que ya se generó -->
+    <script src="js/emoji.js"></script>
 
 </body>
 
