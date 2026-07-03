@@ -1,3 +1,12 @@
+/* ==========================================================================
+   StockLab — tema oscuro estilo panel de laboratorio
+   Paleta: fondo casi negro azulado + acento teal (vidrio de laboratorio)
+   + colores funcionales de estado (ámbar / rojo / verde)
+   Tipografía: Space Grotesk (títulos) · Inter (texto) · JetBrains Mono (datos)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 :root {
     /* superficies */
     --bg: #0d1114;
@@ -34,6 +43,16 @@
 
 * {
     box-sizing: border-box;
+}
+
+/* Twemoji reemplaza cada emoji por un <img>; esto lo hace comportarse
+   visualmente como el caracter de texto que reemplaza */
+img.emoji {
+    height: 1em;
+    width: 1em;
+    margin: 0 0.05em 0 0.1em;
+    vertical-align: -0.1em;
+    display: inline-block;
 }
 
 html {
@@ -1391,4 +1410,4 @@ small {
         transition: none !important;
         scroll-behavior: auto !important;
     }
-}s
+}
